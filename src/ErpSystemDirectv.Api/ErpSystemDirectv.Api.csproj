@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>addf07b8-fc6e-463c-b3f2-42c40f6ffadd</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ErpSystemDirectv.Contracts\ErpSystemDirectv.Contracts.csproj" />
+    <ProjectReference Include="..\ErpSystemDirectv.Application\ErpSystemDirectv.Application.csproj" />
+    <ProjectReference Include="..\ErpSystemDirectv.Infrastructure\ErpSystemDirectv.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
