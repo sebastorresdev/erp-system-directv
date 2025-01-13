@@ -1,31 +1,37 @@
-﻿using ErpSystemDirectv.Application.Services.Authentication;
-using ErpSystemDirectv.Contracts.Authentication;
+﻿using ErpSystemDirectv.Application.Login.Queries;
+using ErpSystemDirectv.Contracts.Login;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ErpSystemDirectv.Api.Controllers;
 
-[ApiController]
 [Route("auth")]
-public class AuthenticacionController : ControllerBase
+public class AuthenticacionController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly ISender _mediator;
 
-    public AuthenticacionController(IAuthenticationService authenticationService)
+    public AuthenticacionController(ISender mediator)
     {
-        _authenticationService = authenticationService;
+        _mediator = mediator;
     }
 
     [Route("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var result = _authenticationService.LoginService(request.Username, request.Password);
+        var query = new LoginQuery(request.Username, request.Password);
 
-        AuthenticationResponse response = new(
-            result.Id,
-            result.FullName,
-            result.UserName,
-            result.Token);
+        var authResult = await _mediator.Send(query);
 
-        return Ok(response);
+        return authResult.Match(
+            result => Ok(MapAuthResult(result)),
+            Problem);
     }
+
+    private LoginResponse MapAuthResult(LoginResult result)
+    {
+        return new LoginResponse(
+                    result.Id,
+                    result.Token);
+    }
+
 }

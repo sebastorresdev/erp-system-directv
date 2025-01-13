@@ -1,3 +1,4 @@
+using ErpSystemDirectv.Api.Middleware;
 using ErpSystemDirectv.Application;
 using ErpSystemDirectv.Infrastructure;
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
         .AddInfrastructure(builder.Configuration);
     
     builder.Services.AddControllers();
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 }
 
 var app = builder.Build();

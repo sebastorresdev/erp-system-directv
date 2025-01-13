@@ -1,8 +1,9 @@
-﻿using ErpSystemDirectv.Application.Common.Interfaces.Authentication;
-using ErpSystemDirectv.Application.Common.Services;
-using ErpSystemDirectv.Infrastructure.Authentication;
+﻿using ErpSystemDirectv.Application.Common.Interfaces;
+using ErpSystemDirectv.Infrastructure.Persistence;
+using ErpSystemDirectv.Infrastructure.Repositories;
 using ErpSystemDirectv.Infrastructure.Services;
-
+using ErpSystemDirectv.Infrastructure.TokenGenerator;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,12 @@ public static class DependecyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(connectionString));
 
         return services;
     }
