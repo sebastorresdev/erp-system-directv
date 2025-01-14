@@ -10,6 +10,10 @@ public partial class AppDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Bodega> Bodegas { get; set; }
+
+    public virtual DbSet<Branch> Branches { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Client> Clients { get; set; }
@@ -26,9 +30,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Module> Modules { get; set; }
 
-    public virtual DbSet<OperationStatus> OperationStatuses { get; set; }
+    public virtual DbSet<MovementOperationStatus> MovementOperationStatuses { get; set; }
 
-    public virtual DbSet<OperationType> OperationTypes { get; set; }
+    public virtual DbSet<MovementOperationType> MovementOperationTypes { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
@@ -40,15 +44,13 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ProductMovement> ProductMovements { get; set; }
 
-    public virtual DbSet<ProductMovementDetail> ProductMovementDetails { get; set; }
+    public virtual DbSet<ProductMovementItem> ProductMovementItems { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<RolePermission> RolePermissions { get; set; }
 
-    public virtual DbSet<RolesModule> RolesModules { get; set; }
-
-    public virtual DbSet<SerializedProductMovementDetail> SerializedProductMovementDetails { get; set; }
+    public virtual DbSet<SerializedProductMovementItem> SerializedProductMovementItems { get; set; }
 
     public virtual DbSet<SerializedProductStock> SerializedProductStocks { get; set; }
 
@@ -64,19 +66,94 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserPermissionBranch> UserPermissionBranchs { get; set; }
+
     public virtual DbSet<UserRole> UserRoles { get; set; }
+
+    public virtual DbSet<UserRoleBranch> UserRoleBranchs { get; set; }
 
     public virtual DbSet<Warehouse> Warehouses { get; set; }
 
-    public virtual DbSet<WarehousePermission> WarehousePermissions { get; set; }
-
     public virtual DbSet<WarehouseProduct> WarehouseProducts { get; set; }
-
-    public virtual DbSet<WarehousesStorage> WarehousesStorages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pgcrypto");
+
+        modelBuilder.Entity<Bodega>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("warehouses_storage_pkey");
+
+            entity.ToTable("bodegas");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+            entity.Property(e => e.LocationTypeId).HasColumnName("location_type_id");
+            entity.Property(e => e.RegistrationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp(6) without time zone")
+                .HasColumnName("registration_date");
+            entity.Property(e => e.TechnicianUserId).HasColumnName("technician_user_id");
+            entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
+
+            entity.HasOne(d => d.LocationType).WithMany(p => p.Bodegas)
+                .HasForeignKey(d => d.LocationTypeId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("warehouses_storage_location_type_id_fkey");
+
+            entity.HasOne(d => d.TechnicianUser).WithMany(p => p.Bodegas)
+                .HasForeignKey(d => d.TechnicianUserId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("warehouses_storage_technician_user_id_fkey");
+
+            entity.HasOne(d => d.Warehouse).WithMany(p => p.Bodegas)
+                .HasForeignKey(d => d.WarehouseId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("warehouses_storage_warehouse_id_fkey");
+        });
+
+        modelBuilder.Entity<Branch>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("branches_pkey");
+
+            entity.ToTable("branches");
+
+            entity.HasIndex(e => e.Code, "branches_code_key").IsUnique();
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(200)
+                .HasColumnName("address");
+            entity.Property(e => e.Code)
+                .HasMaxLength(20)
+                .HasColumnName("code");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasColumnName("name");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(20)
+                .HasColumnName("phone");
+            entity.Property(e => e.RegistrationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("registration_date");
+            entity.Property(e => e.UbigeoId).HasColumnName("ubigeo_id");
+        });
 
         modelBuilder.Entity<Category>(entity =>
         {
@@ -365,11 +442,11 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("routes");
         });
 
-        modelBuilder.Entity<OperationStatus>(entity =>
+        modelBuilder.Entity<MovementOperationStatus>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("operation_statuses_pkey");
 
-            entity.ToTable("operation_statuses");
+            entity.ToTable("movement_operation_statuses");
 
             entity.HasIndex(e => e.Name, "operation_statuses_name_key").IsUnique();
 
@@ -388,11 +465,11 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("registration_date");
         });
 
-        modelBuilder.Entity<OperationType>(entity =>
+        modelBuilder.Entity<MovementOperationType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("operation_types_pkey");
 
-            entity.ToTable("operation_types");
+            entity.ToTable("movement_operation_types");
 
             entity.HasIndex(e => e.Code, "operation_types_code_key").IsUnique();
 
@@ -431,6 +508,7 @@ public partial class AppDbContext : DbContext
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("attention_date");
             entity.Property(e => e.BackofficeUserId).HasColumnName("backoffice_user_id");
+            entity.Property(e => e.BrancheId).HasColumnName("branche_id");
             entity.Property(e => e.ClientId).HasColumnName("client_id");
             entity.Property(e => e.CreationDate)
                 .HasColumnType("timestamp(6) without time zone")
@@ -470,6 +548,11 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.BackofficeUserId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_tasks_backoffice_user");
+
+            entity.HasOne(d => d.Branche).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.BrancheId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_tasks_branche");
 
             entity.HasOne(d => d.Client).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.ClientId)
@@ -616,7 +699,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(256)
                 .HasColumnName("description");
-            entity.Property(e => e.DestinationWarehousesStorageId).HasColumnName("destination_warehouses_storage_id");
+            entity.Property(e => e.DestinationBodegaId).HasColumnName("destination_bodega_id");
             entity.Property(e => e.Image)
                 .HasMaxLength(256)
                 .HasColumnName("image");
@@ -626,40 +709,47 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.LastUpdated)
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("last_updated");
-            entity.Property(e => e.MovementCode).HasColumnName("movement_code");
+            entity.Property(e => e.MovementCode)
+                .HasMaxLength(64)
+                .HasColumnName("movement_code");
             entity.Property(e => e.MovementDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("movement_date");
-            entity.Property(e => e.OperationStatusId).HasColumnName("operation_status_id");
-            entity.Property(e => e.OperationTypeId).HasColumnName("operation_type_id");
-            entity.Property(e => e.OriginWarehousesStorageId).HasColumnName("origin_warehouses_storage_id");
+            entity.Property(e => e.MovementOperationStatusId).HasColumnName("movement_operation_status_id");
+            entity.Property(e => e.MovementOperationTypeId).HasColumnName("movement_operation_type_id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.OriginBodegaId).HasColumnName("origin_bodega_id");
             entity.Property(e => e.ReceivedUserId).HasColumnName("received_user_id");
             entity.Property(e => e.RegistrationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("registration_date");
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
-            entity.Property(e => e.TaskId).HasColumnName("task_id");
 
             entity.HasOne(d => d.CreatedUser).WithMany(p => p.ProductMovementCreatedUsers)
                 .HasForeignKey(d => d.CreatedUserId)
                 .HasConstraintName("fk_created_user");
 
-            entity.HasOne(d => d.DestinationWarehousesStorage).WithMany(p => p.ProductMovementDestinationWarehousesStorages)
-                .HasForeignKey(d => d.DestinationWarehousesStorageId)
+            entity.HasOne(d => d.DestinationBodega).WithMany(p => p.ProductMovementDestinationBodegas)
+                .HasForeignKey(d => d.DestinationBodegaId)
                 .HasConstraintName("fk_destination_warehouse_storage");
 
-            entity.HasOne(d => d.OperationStatus).WithMany(p => p.ProductMovements)
-                .HasForeignKey(d => d.OperationStatusId)
+            entity.HasOne(d => d.MovementOperationStatus).WithMany(p => p.ProductMovements)
+                .HasForeignKey(d => d.MovementOperationStatusId)
                 .HasConstraintName("fk_operation_status");
 
-            entity.HasOne(d => d.OperationType).WithMany(p => p.ProductMovements)
-                .HasForeignKey(d => d.OperationTypeId)
+            entity.HasOne(d => d.MovementOperationType).WithMany(p => p.ProductMovements)
+                .HasForeignKey(d => d.MovementOperationTypeId)
                 .HasConstraintName("fk_operation_type");
 
-            entity.HasOne(d => d.OriginWarehousesStorage).WithMany(p => p.ProductMovementOriginWarehousesStorages)
-                .HasForeignKey(d => d.OriginWarehousesStorageId)
+            entity.HasOne(d => d.Order).WithMany(p => p.ProductMovements)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("fk_task");
+
+            entity.HasOne(d => d.OriginBodega).WithMany(p => p.ProductMovementOriginBodegas)
+                .HasForeignKey(d => d.OriginBodegaId)
                 .HasConstraintName("fk_origin_warehouse_storage");
 
             entity.HasOne(d => d.ReceivedUser).WithMany(p => p.ProductMovementReceivedUsers)
@@ -671,18 +761,13 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.SupplierId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("fk_supplier");
-
-            entity.HasOne(d => d.Task).WithMany(p => p.ProductMovements)
-                .HasForeignKey(d => d.TaskId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_task");
         });
 
-        modelBuilder.Entity<ProductMovementDetail>(entity =>
+        modelBuilder.Entity<ProductMovementItem>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("product_movement_details_pkey");
 
-            entity.ToTable("product_movement_details");
+            entity.ToTable("product_movement_items");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
@@ -695,12 +780,12 @@ public partial class AppDbContext : DbContext
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("update_date");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.ProductMovementDetails)
+            entity.HasOne(d => d.Product).WithMany(p => p.ProductMovementItems)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_product_movement_details_product");
 
-            entity.HasOne(d => d.ProductMovement).WithMany(p => p.ProductMovementDetails)
+            entity.HasOne(d => d.ProductMovement).WithMany(p => p.ProductMovementItems)
                 .HasForeignKey(d => d.ProductMovementId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_product_movement_details_movement");
@@ -761,42 +846,11 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("role_permission_role_id_fkey");
         });
 
-        modelBuilder.Entity<RolesModule>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("roles_modules_pkey");
-
-            entity.ToTable("roles_modules");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.CanView)
-                .HasDefaultValue(false)
-                .HasColumnName("can_view");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true)
-                .HasColumnName("is_active");
-            entity.Property(e => e.ModuleId).HasColumnName("module_id");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
-
-            entity.HasOne(d => d.Module).WithMany(p => p.RolesModules)
-                .HasForeignKey(d => d.ModuleId)
-                .HasConstraintName("fk_roles_modulos_module");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.RolesModules)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("fk_roles_modulos_role");
-        });
-
-        modelBuilder.Entity<SerializedProductMovementDetail>(entity =>
+        modelBuilder.Entity<SerializedProductMovementItem>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("serialized_product_movement_details_pkey");
 
-            entity.ToTable("serialized_product_movement_details");
+            entity.ToTable("serialized_product_movement_items");
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
@@ -804,24 +858,18 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.LinkedCardNumber)
                 .HasMaxLength(32)
                 .HasColumnName("linked_card_number");
-            entity.Property(e => e.OperationStatusId).HasColumnName("operation_status_id");
             entity.Property(e => e.ProductMovementId).HasColumnName("product_movement_id");
             entity.Property(e => e.SerializedProductStockId).HasColumnName("serialized_product_stock_id");
             entity.Property(e => e.UpdateDate)
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("update_date");
 
-            entity.HasOne(d => d.OperationStatus).WithMany(p => p.SerializedProductMovementDetails)
-                .HasForeignKey(d => d.OperationStatusId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_serialized_product_movement_details_operation_status");
-
-            entity.HasOne(d => d.ProductMovement).WithMany(p => p.SerializedProductMovementDetails)
+            entity.HasOne(d => d.ProductMovement).WithMany(p => p.SerializedProductMovementItems)
                 .HasForeignKey(d => d.ProductMovementId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_serialized_product_movement_details_movement");
 
-            entity.HasOne(d => d.SerializedProductStock).WithMany(p => p.SerializedProductMovementDetails)
+            entity.HasOne(d => d.SerializedProductStock).WithMany(p => p.SerializedProductMovementItems)
                 .HasForeignKey(d => d.SerializedProductStockId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_serialized_product_movement_details_stock");
@@ -838,6 +886,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
+            entity.Property(e => e.BodegaId).HasColumnName("bodega_id");
             entity.Property(e => e.CardNumber)
                 .HasMaxLength(32)
                 .HasColumnName("card_number");
@@ -855,15 +904,14 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(32)
                 .HasColumnName("serial_number");
-            entity.Property(e => e.WarehousesStorageId).HasColumnName("warehouses_storage_id");
+
+            entity.HasOne(d => d.Bodega).WithMany(p => p.SerializedProductStocks)
+                .HasForeignKey(d => d.BodegaId)
+                .HasConstraintName("fk_stock_product_serials_warehouses_storage");
 
             entity.HasOne(d => d.Product).WithMany(p => p.SerializedProductStocks)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("fk_stock_product_serials_product");
-
-            entity.HasOne(d => d.WarehousesStorage).WithMany(p => p.SerializedProductStocks)
-                .HasForeignKey(d => d.WarehousesStorageId)
-                .HasConstraintName("fk_stock_product_serials_warehouses_storage");
         });
 
         modelBuilder.Entity<StockProduct>(entity =>
@@ -875,6 +923,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
+            entity.Property(e => e.BodegaId).HasColumnName("bodega_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.RegistrationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -883,15 +932,14 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Stock)
                 .HasDefaultValue(0)
                 .HasColumnName("stock");
-            entity.Property(e => e.WarehousesStorageId).HasColumnName("warehouses_storage_id");
+
+            entity.HasOne(d => d.Bodega).WithMany(p => p.StockProducts)
+                .HasForeignKey(d => d.BodegaId)
+                .HasConstraintName("fk_stock_products_warehouses_storage");
 
             entity.HasOne(d => d.Product).WithMany(p => p.StockProducts)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("fk_stock_products_product");
-
-            entity.HasOne(d => d.WarehousesStorage).WithMany(p => p.StockProducts)
-                .HasForeignKey(d => d.WarehousesStorageId)
-                .HasConstraintName("fk_stock_products_warehouses_storage");
         });
 
         modelBuilder.Entity<Supplier>(entity =>
@@ -1051,6 +1099,35 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("fk_users_employee");
         });
 
+        modelBuilder.Entity<UserPermissionBranch>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("users_permissions_branchs_pkey");
+
+            entity.ToTable("user_permission_branchs");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+            entity.Property(e => e.PermissionId).HasColumnName("permission_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Branch).WithMany(p => p.UserPermissionBranches)
+                .HasForeignKey(d => d.BranchId)
+                .HasConstraintName("users_permissions_branchs_branch_id_fkey");
+
+            entity.HasOne(d => d.Permission).WithMany(p => p.UserPermissionBranches)
+                .HasForeignKey(d => d.PermissionId)
+                .HasConstraintName("users_permissions_branchs_permission_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserPermissionBranches)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("users_permissions_branchs_user_id_fkey");
+        });
+
         modelBuilder.Entity<UserRole>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("user_role_pkey");
@@ -1081,6 +1158,32 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("user_role_user_id_fkey");
         });
 
+        modelBuilder.Entity<UserRoleBranch>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("users_roles_branchs_pkey");
+
+            entity.ToTable("user_role_branchs");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
+            entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Branch).WithMany(p => p.UserRoleBranches)
+                .HasForeignKey(d => d.BranchId)
+                .HasConstraintName("users_roles_branchs_branch_id_fkey");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.UserRoleBranches)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("users_roles_branchs_role_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserRoleBranches)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("users_roles_branchs_user_id_fkey");
+        });
+
         modelBuilder.Entity<Warehouse>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("warehouses_pkey");
@@ -1097,6 +1200,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(128)
                 .HasColumnName("address");
+            entity.Property(e => e.BrancheId).HasColumnName("branche_id");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("is_active");
@@ -1112,38 +1216,15 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("short_name");
             entity.Property(e => e.UbigeoId).HasColumnName("ubigeo_id");
 
+            entity.HasOne(d => d.Branche).WithMany(p => p.Warehouses)
+                .HasForeignKey(d => d.BrancheId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("warehouses_branche_id_fkey");
+
             entity.HasOne(d => d.Ubigeo).WithMany(p => p.Warehouses)
                 .HasForeignKey(d => d.UbigeoId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("warehouses_ubigeo_id_fkey");
-        });
-
-        modelBuilder.Entity<WarehousePermission>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("warehouse_permissions_pkey");
-
-            entity.ToTable("warehouse_permissions");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true)
-                .HasColumnName("is_active");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
-
-            entity.HasOne(d => d.User).WithMany(p => p.WarehousePermissions)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("fk_user");
-
-            entity.HasOne(d => d.Warehouse).WithMany(p => p.WarehousePermissions)
-                .HasForeignKey(d => d.WarehouseId)
-                .HasConstraintName("fk_warehouse");
         });
 
         modelBuilder.Entity<WarehouseProduct>(entity =>
@@ -1172,42 +1253,6 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Warehouse).WithMany(p => p.WarehouseProducts)
                 .HasForeignKey(d => d.WarehouseId)
                 .HasConstraintName("warehouse_products_warehouse_id_fkey");
-        });
-
-        modelBuilder.Entity<WarehousesStorage>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("warehouses_storage_pkey");
-
-            entity.ToTable("warehouses_storage");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true)
-                .HasColumnName("is_active");
-            entity.Property(e => e.LocationTypeId).HasColumnName("location_type_id");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
-            entity.Property(e => e.TechnicianUserId).HasColumnName("technician_user_id");
-            entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
-
-            entity.HasOne(d => d.LocationType).WithMany(p => p.WarehousesStorages)
-                .HasForeignKey(d => d.LocationTypeId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("warehouses_storage_location_type_id_fkey");
-
-            entity.HasOne(d => d.TechnicianUser).WithMany(p => p.WarehousesStorages)
-                .HasForeignKey(d => d.TechnicianUserId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("warehouses_storage_technician_user_id_fkey");
-
-            entity.HasOne(d => d.Warehouse).WithMany(p => p.WarehousesStorages)
-                .HasForeignKey(d => d.WarehouseId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("warehouses_storage_warehouse_id_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

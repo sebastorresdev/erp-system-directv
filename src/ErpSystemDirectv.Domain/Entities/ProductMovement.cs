@@ -7,19 +7,19 @@ public partial class ProductMovement
 {
     public Guid Id { get; set; }
 
-    public int? MovementCode { get; set; }
+    public string? MovementCode { get; set; }
 
-    public Guid OperationTypeId { get; set; }
+    public Guid MovementOperationTypeId { get; set; }
 
-    public Guid OriginWarehousesStorageId { get; set; }
+    public Guid OriginBodegaId { get; set; }
 
-    public Guid DestinationWarehousesStorageId { get; set; }
+    public Guid DestinationBodegaId { get; set; }
 
     public Guid? SupplierId { get; set; }
 
-    public Guid? TaskId { get; set; }
+    public Guid? OrderId { get; set; }
 
-    public Guid OperationStatusId { get; set; }
+    public Guid MovementOperationStatusId { get; set; }
 
     public Guid CreatedUserId { get; set; }
 
@@ -41,21 +41,21 @@ public partial class ProductMovement
 
     public virtual User CreatedUser { get; set; } = null!;
 
-    public virtual WarehousesStorage DestinationWarehousesStorage { get; set; } = null!;
+    public virtual Bodega DestinationBodega { get; set; } = null!;
 
-    public virtual OperationStatus OperationStatus { get; set; } = null!;
+    public virtual MovementOperationStatus MovementOperationStatus { get; set; } = null!;
 
-    public virtual OperationType OperationType { get; set; } = null!;
+    public virtual MovementOperationType MovementOperationType { get; set; } = null!;
 
-    public virtual WarehousesStorage OriginWarehousesStorage { get; set; } = null!;
+    public virtual Order? Order { get; set; }
 
-    public virtual ICollection<ProductMovementDetail> ProductMovementDetails { get; set; } = new List<ProductMovementDetail>();
+    public virtual Bodega OriginBodega { get; set; } = null!;
+
+    public virtual ICollection<ProductMovementItem> ProductMovementItems { get; set; } = new List<ProductMovementItem>();
 
     public virtual User? ReceivedUser { get; set; }
 
-    public virtual ICollection<SerializedProductMovementDetail> SerializedProductMovementDetails { get; set; } = new List<SerializedProductMovementDetail>();
+    public virtual ICollection<SerializedProductMovementItem> SerializedProductMovementItems { get; set; } = new List<SerializedProductMovementItem>();
 
     public virtual Supplier? Supplier { get; set; }
-
-    public virtual Order? Task { get; set; }
 }

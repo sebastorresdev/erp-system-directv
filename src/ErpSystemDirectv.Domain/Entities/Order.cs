@@ -37,7 +37,11 @@ public partial class Order
 
     public DateTime RegistrationDate { get; set; }
 
+    public Guid BrancheId { get; set; }
+
     public virtual User? BackofficeUser { get; set; }
+
+    public virtual Branch Branche { get; set; } = null!;
 
     public virtual Client Client { get; set; } = null!;
 

@@ -12,6 +12,4 @@ public partial class Module
     public string Description { get; set; } = null!;
 
     public DateTime RegistrationDate { get; set; }
-
-    public virtual ICollection<RolesModule> RolesModules { get; set; } = new List<RolesModule>();
 }

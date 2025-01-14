@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class ProductMovementDetail
+public partial class ProductMovementItem
 {
     public Guid Id { get; set; }
 

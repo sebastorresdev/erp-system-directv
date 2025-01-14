@@ -15,15 +15,15 @@ public partial class SerializedProductStock
 
     public Guid ProductId { get; set; }
 
-    public Guid WarehousesStorageId { get; set; }
+    public Guid BodegaId { get; set; }
 
     public bool IsActive { get; set; }
 
     public DateTime RegistrationDate { get; set; }
 
+    public virtual Bodega Bodega { get; set; } = null!;
+
     public virtual Product Product { get; set; } = null!;
 
-    public virtual ICollection<SerializedProductMovementDetail> SerializedProductMovementDetails { get; set; } = new List<SerializedProductMovementDetail>();
-
-    public virtual WarehousesStorage WarehousesStorage { get; set; } = null!;
+    public virtual ICollection<SerializedProductMovementItem> SerializedProductMovementItems { get; set; } = new List<SerializedProductMovementItem>();
 }

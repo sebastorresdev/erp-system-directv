@@ -1,4 +1,7 @@
-﻿namespace ErpSystemDirectv.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ErpSystemDirectv.Domain.Entities;
 
 public partial class User
 {
@@ -10,13 +13,15 @@ public partial class User
 
     public Guid EmployeeId { get; set; }
 
-    public bool IsActive { get; set; } = true;
+    public bool IsActive { get; set; }
 
     public DateTime RegistrationDate { get; set; }
 
     public string? Email { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public virtual ICollection<Bodega> Bodegas { get; set; } = new List<Bodega>();
 
     public virtual Employee Employee { get; set; } = null!;
 
@@ -30,9 +35,9 @@ public partial class User
 
     public virtual ICollection<ProductMovement> ProductMovementReceivedUsers { get; set; } = new List<ProductMovement>();
 
+    public virtual ICollection<UserPermissionBranch> UserPermissionBranches { get; set; } = new List<UserPermissionBranch>();
+
+    public virtual ICollection<UserRoleBranch> UserRoleBranches { get; set; } = new List<UserRoleBranch>();
+
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-
-    public virtual ICollection<WarehousePermission> WarehousePermissions { get; set; } = new List<WarehousePermission>();
-
-    public virtual ICollection<WarehousesStorage> WarehousesStorages { get; set; } = new List<WarehousesStorage>();
 }

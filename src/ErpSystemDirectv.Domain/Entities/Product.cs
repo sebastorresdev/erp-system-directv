@@ -37,7 +37,7 @@ public partial class Product
 
     public virtual Category? Category { get; set; }
 
-    public virtual ICollection<ProductMovementDetail> ProductMovementDetails { get; set; } = new List<ProductMovementDetail>();
+    public virtual ICollection<ProductMovementItem> ProductMovementItems { get; set; } = new List<ProductMovementItem>();
 
     public virtual ICollection<SerializedProductStock> SerializedProductStocks { get; set; } = new List<SerializedProductStock>();
 

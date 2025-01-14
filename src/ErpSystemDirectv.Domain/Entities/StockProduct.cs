@@ -9,13 +9,13 @@ public partial class StockProduct
 
     public Guid ProductId { get; set; }
 
-    public Guid WarehousesStorageId { get; set; }
+    public Guid BodegaId { get; set; }
 
     public int Stock { get; set; }
 
     public DateTime RegistrationDate { get; set; }
 
-    public virtual Product Product { get; set; } = null!;
+    public virtual Bodega Bodega { get; set; } = null!;
 
-    public virtual WarehousesStorage WarehousesStorage { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 }

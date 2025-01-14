@@ -11,5 +11,5 @@ public partial class LocationType
 
     public string Description { get; set; } = null!;
 
-    public virtual ICollection<WarehousesStorage> WarehousesStorages { get; set; } = new List<WarehousesStorage>();
+    public virtual ICollection<Bodega> Bodegas { get; set; } = new List<Bodega>();
 }

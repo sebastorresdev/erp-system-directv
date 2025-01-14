@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class SerializedProductMovementDetail
+public partial class SerializedProductMovementItem
 {
     public Guid Id { get; set; }
 
@@ -13,11 +13,9 @@ public partial class SerializedProductMovementDetail
 
     public Guid SerializedProductStockId { get; set; }
 
-    public Guid OperationStatusId { get; set; }
-
     public DateTime? UpdateDate { get; set; }
 
-    public virtual OperationStatus OperationStatus { get; set; } = null!;
+    public bool IsReceived { get; set; }
 
     public virtual ProductMovement ProductMovement { get; set; } = null!;
 

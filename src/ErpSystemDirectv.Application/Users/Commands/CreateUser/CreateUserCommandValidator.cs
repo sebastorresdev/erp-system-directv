@@ -1,4 +1,3 @@
-using System.Data;
 using FluentValidation;
 
 namespace ErpSystemDirectv.Application.Users.Commands.CreateUser;

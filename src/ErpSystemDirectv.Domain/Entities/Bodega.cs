@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class WarehousesStorage
+public partial class Bodega
 {
     public Guid Id { get; set; }
 
@@ -19,9 +19,9 @@ public partial class WarehousesStorage
 
     public virtual LocationType LocationType { get; set; } = null!;
 
-    public virtual ICollection<ProductMovement> ProductMovementDestinationWarehousesStorages { get; set; } = new List<ProductMovement>();
+    public virtual ICollection<ProductMovement> ProductMovementDestinationBodegas { get; set; } = new List<ProductMovement>();
 
-    public virtual ICollection<ProductMovement> ProductMovementOriginWarehousesStorages { get; set; } = new List<ProductMovement>();
+    public virtual ICollection<ProductMovement> ProductMovementOriginBodegas { get; set; } = new List<ProductMovement>();
 
     public virtual ICollection<SerializedProductStock> SerializedProductStocks { get; set; } = new List<SerializedProductStock>();
 

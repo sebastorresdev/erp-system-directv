@@ -19,11 +19,13 @@ public partial class Warehouse
 
     public DateTime RegistrationDate { get; set; }
 
+    public Guid BrancheId { get; set; }
+
+    public virtual ICollection<Bodega> Bodegas { get; set; } = new List<Bodega>();
+
+    public virtual Branch Branche { get; set; } = null!;
+
     public virtual Ubigeo Ubigeo { get; set; } = null!;
 
-    public virtual ICollection<WarehousePermission> WarehousePermissions { get; set; } = new List<WarehousePermission>();
-
     public virtual ICollection<WarehouseProduct> WarehouseProducts { get; set; } = new List<WarehouseProduct>();
-
-    public virtual ICollection<WarehousesStorage> WarehousesStorages { get; set; } = new List<WarehousesStorage>();
 }

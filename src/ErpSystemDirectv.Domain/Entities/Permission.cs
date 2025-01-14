@@ -16,4 +16,6 @@ public partial class Permission
     public DateTime RegistrationDate { get; set; }
 
     public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+
+    public virtual ICollection<UserPermissionBranch> UserPermissionBranches { get; set; } = new List<UserPermissionBranch>();
 }
