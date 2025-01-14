@@ -305,6 +305,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Gender)
                 .HasMaxLength(1)
                 .HasColumnName("gender");
+            entity.Property(e => e.Image)
+                .HasMaxLength(255)
+                .HasColumnName("image");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("is_active");

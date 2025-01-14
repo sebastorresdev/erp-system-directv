@@ -41,6 +41,8 @@ public partial class Employee
 
     public string LastName { get; set; } = null!;
 
+    public string? Image { get; set; }
+
     public virtual Ubigeo Ubigeo { get; set; } = null!;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
