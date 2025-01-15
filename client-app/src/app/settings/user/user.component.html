@@ -1,0 +1,15 @@
+<p-toolbar class="rounded-none!" [dt]="amberSwitch">
+    <ng-template #start>
+      <p-button label="Nuevo" />
+    </ng-template>
+    <ng-template #center>
+        <p-iconfield iconPosition="left">
+            <p-inputicon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Search" />
+        </p-iconfield>
+    </ng-template>
+    <ng-template #end>
+      <p-button icon="pi pi-list" [rounded]="true" [text]="true" severity="secondary" />
+      <p-button icon="pi pi-th-large" [rounded]="true" [text]="true" severity="secondary" />
+    </ng-template>
+</p-toolbar>

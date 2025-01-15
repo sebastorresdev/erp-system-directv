@@ -1,0 +1,25 @@
+<div class="px-6 py-20 md:px-12 lg:px-20 h-screen">
+    <p-card styleClass="w-full lg:w-6/12 mx-auto">
+        <div class="text-center mb-8">
+            <img src="logo-visual.jpg" alt="logo" class="mb-4 mx-auto h-32 rounded-full"/>
+            <div class="text-3xl font-medium mb-4">Bienvenido de nuevo</div>
+        </div>
+        <div>
+            <label for="email1" class="font-medium mb-2 block">Email</label>
+            <input pInputText  id="email1" type="text" placeholder="Email address" class="w-full mb-4" />
+
+            <label for="password1" class="font-medium mb-2 block">Password</label>
+            <input pInputText  id="password1" type="password" placehoder="Password" class="w-full mb-4" />
+
+            <div class="flex items-center justify-between mb-12">
+                <div class="flex items-center">
+                    <p-checkbox id="rememberme1" v-model="checked1" :binary="true" class="mr-2" />
+                    <label for="rememberme1">Remember me</label>
+                </div>
+                <a class="font-medium no-underline ml-2 text-primary text-right cursor-pointer">Forgot password?</a>
+            </div>
+            <p-button label="Sign In" icon="pi pi-user" styleClass="w-full"/>
+        </div>
+        
+    </p-card>
+</div>

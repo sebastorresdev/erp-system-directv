@@ -1,0 +1,30 @@
+<div class="pt-2 px-4 h-screen">
+    <header class="flex justify-between">
+        <div class="flex items-center gap-4">
+            <img src="logo-visual.jpg" alt="logo-visual" class="w-16 h-16 rounded-full">
+            <h1 class="font-bold text-2xl">VISUAL CONNECTIONS</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex gap-2">
+                <p-button icon="pi pi-twitter"
+                severity="secondary"
+                pTooltip="Dark" tooltipPosition="bottom" />
+                <p-button icon="pi pi-comments"
+                severity="secondary"
+                pTooltip="Dark" tooltipPosition="bottom" />
+                <p-button icon="pi pi-moon" 
+                pTooltip="Dark" tooltipPosition="bottom"
+                (onClick)="toggleDarkMode()" />
+            </div>
+            <p>Sebastian Torres</p>
+            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="!w-10 !h-10" />
+        </div>
+    </header>
+    <main class="w-auto flex items-start justify-center">
+        <div class="flex flex-wrap justify-start gap-x-12 gap-y-6 w-full max-w-4xl mt-32">
+            @for (item of menuItem; track $index) {
+                <app-option [menuItem]="item"/>
+            }
+        </div>
+    </main>
+</div>

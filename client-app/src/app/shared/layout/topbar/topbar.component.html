@@ -1,0 +1,29 @@
+<div class="card">
+    <p-menubar [model]="items">
+        <ng-template #start>
+            <p-button
+            [icon]="hover ? 'pi pi-arrow-left' : menuItem().icon"
+            [className]="'transform transition-transform duration-300 ease-in-out hover:translate-x-2 mr-4'"
+            [text]="true"
+            size="large"
+            [label]="menuItem().label"
+            (click)="backtToHome()"
+            (mouseenter)="hover = true"
+            (mouseleave)="hover = false">
+            </p-button>
+        </ng-template>
+        <ng-template #item let-item let-root="root">
+            <a pRipple class="flex items-center p-menubar-item-link"
+                [routerLink]="item.routerLink">
+                <span [class]="item.icon"></span>
+                <span>{{ item.label }}</span>
+                <i *ngIf="item.items" [ngClass]="['ml-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+            </a>
+        </ng-template>
+        <ng-template #end>
+            <div class="flex items-center gap-2">
+                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>
