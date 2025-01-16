@@ -1,15 +1,78 @@
-<p-toolbar class="rounded-none!" [dt]="amberSwitch">
-    <ng-template #start>
-      <p-button label="Nuevo" />
-    </ng-template>
-    <ng-template #center>
-        <p-iconfield iconPosition="left">
-            <p-inputicon styleClass="pi pi-search" />
-            <input type="text" pInputText placeholder="Search" />
-        </p-iconfield>
-    </ng-template>
-    <ng-template #end>
-      <p-button icon="pi pi-list" [rounded]="true" [text]="true" severity="secondary" />
-      <p-button icon="pi pi-th-large" [rounded]="true" [text]="true" severity="secondary" />
-    </ng-template>
-</p-toolbar>
+<p-dataview #dv [value]="users()" [layout]="layout">
+      <ng-template #header>
+          <div class="flex justify-between">
+              <p-button label="Nuevo" />
+
+              <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+                  <ng-template #item let-item>
+                      <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+                  </ng-template>
+              </p-selectbutton>
+          </div>
+      </ng-template>
+
+
+
+      <ng-template #grid let-items>
+        <div class="grid grid-cols-12 gap-x-2 pt-2 px-2">
+          @for (item of items; track $index) {
+            <div class="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 md:p-1">
+              <a class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0
+              dark:bg-surface-900 block hover:cursor-pointer"
+              >
+                <div class="flex gap-4 ">
+                  <p-avatar image="{{item.img}}"
+                  class="flex items-center justify-center mr-2 !min-w-14 !h-16" size="xlarge" />
+                  <main class="w-full">
+                    <div class="flex justify-between">
+                      <h2 class="text-lg font-bold">
+                        {{ item.username }}</h2>
+                      <p-tag
+                        [value]="item.isActive ? 'Active' : 'Inactive'"
+                        [severity]="item.isActive ? 'success' : 'danger'"
+                        styleClass="text-sm px-3 py-1 rounded-md  inline">
+                      </p-tag>
+                    </div>
+                    <div class="flex items-center gap-2 dark:text-gray-500 text-gray-700">
+                      <i class="pi pi-envelope"></i>
+                      <p class="">
+                         {{ item.email }}</p>
+                    </div>
+                  </main>
+                </div>
+              </a>
+            </div>
+          }
+          </div>
+      </ng-template>
+
+
+      <ng-template #list let-items>
+        <p-table [value]="items" selectionMode="single"
+        [(selection)]="selectedUser"
+        dataKey="code"
+        (onRowSelect)="onRowSelect($event)"
+        [tableStyle]="{'min-width': '50rem'}">
+          <ng-template #header>
+              <tr>
+                  <th>Code</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Estado</th>
+              </tr>
+          </ng-template>
+          <ng-template #body let-user>
+              <tr [pSelectableRow]="user">
+                  <td>{{user.id}}</td>
+                  <td>{{user.username}}</td>
+                  <td>{{user.email}}</td>
+                  <td>
+                    <p-tag
+                    [value]="user.isActive ? 'Active' : 'Inactive'"
+                    [severity]="getSeverity(user)" />
+                  </td>
+              </tr>
+          </ng-template>
+      </p-table>
+      </ng-template>
+    </p-dataview>

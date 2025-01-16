@@ -67,12 +67,12 @@ export class MainMenuComponent implements OnInit{
     //     icon: "pi pi-briefcase",
     //     styleClass: "bg-orange-400"
     //   }
-    // ];    
+    // ];
     this.menuItem = this._menuService.getMenuItems();
   }
-  
+
   toggleDarkMode() {
     const element = document.querySelector('html');
-    element!.classList.toggle('my-app-dark');
+    element!.classList.toggle('dark');
   }
 }
