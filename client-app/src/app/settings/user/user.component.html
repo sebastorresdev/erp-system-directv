@@ -11,8 +11,6 @@
           </div>
       </ng-template>
 
-
-
       <ng-template #grid let-items>
         <div class="grid grid-cols-12 gap-x-2 pt-2 px-2">
           @for (item of items; track $index) {
@@ -50,15 +48,18 @@
       <ng-template #list let-items>
         <p-table [value]="items" selectionMode="single"
         [(selection)]="selectedUser"
-        dataKey="code"
+        stripedRows
+        [resizableColumns]="true"
+        columnResizeMode="expand"
+        dataKey="id"
         (onRowSelect)="onRowSelect($event)"
         [tableStyle]="{'min-width': '50rem'}">
           <ng-template #header>
               <tr>
-                  <th>Code</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Estado</th>
+                  <th pResizableColumn pSortableColumn="id">Code</th>
+                  <th pResizableColumn pSortableColumn="username">Username</th>
+                  <th pResizableColumn pSortableColumn="email">Email</th>
+                  <th pResizableColumn pSortableColumn="isActive">Estado</th>
               </tr>
           </ng-template>
           <ng-template #body let-user>

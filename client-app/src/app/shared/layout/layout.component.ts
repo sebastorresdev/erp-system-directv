@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { TopbarComponent } from "./topbar/topbar.component";
 import { MenuItem } from 'primeng/api';
 import { MenuService } from '../services/menu.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -14,21 +15,29 @@ import { MenuService } from '../services/menu.service';
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit {
-  selectedMenuItem: MenuItem | undefined;
+  selectedMenuItem = signal<MenuItem | undefined>(undefined);
 
   // private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
   private _menuService = inject(MenuService);
+  private routerSubscription: Subscription | undefined;
 
   ngOnInit() {
-    // Obtener la ruta activa completa con ActivatedRoute
-    const currentRoute = this.router.url.split('/')[1]; // Obtiene la primera parte de la ruta después de "/"
+    // Suscribirse a los cambios de navegación
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = this.router.url.split('/')[1]; // Obtiene la primera parte de la ruta después de "/"
+        this.selectedMenuItem.set(this._menuService.getMenu(currentRoute));
+      }
+    });
 
-    // Asegúrate de que 'getMenu' se está llamando correctamente con la ruta adecuada
-    this.selectedMenuItem = this._menuService.getMenu(currentRoute);
+    // Detectar ruta inicial
+    const initialRoute = this.router.url.split('/')[1];
+    this.selectedMenuItem.set(this._menuService.getMenu(initialRoute));
+  }
 
-    console.log('Ruta actual:', currentRoute);
-    console.log('Menú seleccionado:', this.selectedMenuItem);
+  ngOnDestroy() {
+    // Cancelar la suscripción al evento cuando el componente se destruya
+    this.routerSubscription?.unsubscribe();
   }
 }
