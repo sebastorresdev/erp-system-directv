@@ -1,31 +1,58 @@
-<nav class="flex flex-row w-full justify-between h-14 p-3">
-  <div class="flex flex-row items-center">
-    @if(menuItem())
-    {
-      <i class="pi pi-arrow-left text-primary !text-xl
-      transform transition-transform hover:scale-125 duration-200 hover:cursor-pointer mr-4"
-      (click)="backtToHome()" ></i>
-      <h1 class="text-surface-600 text-xl mr-4 font-bold">{{menuItem()?.label}}</h1>
-      <p-menubar [model]="menuItem()?.items" [dt]="amberTolbar">
-      </p-menubar>
-    }
-  </div>
-  <div class="flex items-center gap-4">
-    <div class="flex gap-2">
-        <p-button icon="pi pi-twitter"
-        size="small"
-        severity="secondary"
-        pTooltip="Dark" tooltipPosition="bottom" />
-        <p-button icon="pi pi-comments"
-        size="small"
-        severity="secondary"
-        pTooltip="Dark" tooltipPosition="bottom" />
-        <p-button icon="pi pi-moon"
-        size="small"
-        pTooltip="Dark" tooltipPosition="bottom"
-        (onClick)="toggleDarkMode()" />
+<p-menubar [model]="menuItem()?.items" [dt]="topbarStyle">
+  <ng-template #start>
+    <i class="pi pi-arrow-left text-primary !text-xl
+    transform transition-transform hover:scale-125 duration-200 hover:cursor-pointer mr-4"
+    pTooltip="Menú de inicio"
+    tooltipPosition="right"
+    (click)="backtToHome()" ></i>
+    <h1 class="text-surface-600 text-xl mr-4 font-bold">{{menuItem()?.label}}</h1>
+  </ng-template>
+  <ng-template #item let-item let-root="root">
+      <a pRipple class="flex items-center p-menubar-item-link"
+      [routerLink]="item.routerLink">
+          <span>{{ item.label }}</span>
+      </a>
+  </ng-template>
+  <ng-template #end>
+    <div class="flex items-center gap-4">
+      <div class="flex gap-1 items-center">
+        <p-button severity="secondary" (click)="op.toggle($event)"
+        [outlined]="true">
+          <i class="pi pi-bell hover:cursor-pointer" pBadge value="2"></i>
+        </p-button>
+        <p-popover #op>
+          <div>
+            esto es una prueba
+          </div>
+        </p-popover>
+          <p-button severity="secondary"
+          [outlined]="true"
+          pTooltip="Cambiar tema"
+          tooltipPosition="bottom"
+          (click)="_layoutService.onThemeToggle()">
+          <i [ngClass]="{ 'pi ': true, 'pi-moon': _layoutService.isDarkTheme, 'pi-sun': !_layoutService.isDarkTheme}"></i>
+        </p-button>
+      </div>
+      <p class="hidden md:block">Visual Connections</p>
+      <p-button
+          icon="pi pi-cog"
+          size="small"
+          (click)="menu.toggle($event)" />
+      <p-menu #menu [model]="options" class="flex justify-center" styleClass="w-full md:w-32" [popup]="true">
+        <ng-template #start>
+          <span class="inline-flex md:hidden items-center gap-1 px-2 py-2">
+            <img src="logo-visual.jpg" alt="logo" class="w-12 rounded-full">
+            <span class="text-xl font-semibold">
+                Visual Connection
+            </span>
+        </span>
+        </ng-template>
+        <ng-template #item let-item>
+            <a pRipple class="flex items-center justify-start p-menu-item-link">
+              <span class="ml-2" >{{ item.label }}</span>
+            </a>
+        </ng-template>
+    </p-menu>
     </div>
-    <p>Sebastian Torres</p>
-    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="!w-10 !h-10" />
-  </div>
-</nav>
+  </ng-template>
+</p-menubar>

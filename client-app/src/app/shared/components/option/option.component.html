@@ -1,10 +1,9 @@
-<div class="inline-block p-2 hover:cursor-pointer">
+<a class="inline-block p-2 hover:cursor-pointer" [routerLink]="menuItem().routerLink">
   <div class="flex flex-col gap-4 items-center w-28">
-      <a class="w-auto inline-block p-4 rounded-md transform transition-transform hover:scale-125 duration-200"
-      [routerLink]="menuItem().routerLink"
+      <div class="w-auto inline-block p-4 rounded-md transform transition-transform hover:scale-125 duration-300"
       [ngClass]="menuItem().styleClass">
           <i [class]="menuItem().icon" style="font-size: 3rem"></i>
-      </a>
+      </div>
       <span>{{menuItem().label}}</span>
   </div>
-</div>
+</a>

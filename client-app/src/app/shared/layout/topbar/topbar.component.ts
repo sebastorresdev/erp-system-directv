@@ -8,7 +8,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Menubar } from 'primeng/menubar';
 import { MenuService } from '../../services/menu.service';
 import { Router, RouterModule } from '@angular/router';
-
+import { Menu } from 'primeng/menu';
+import { FormsModule } from '@angular/forms';
+import { Popover } from 'primeng/popover';
+import { LayoutService } from '../../services/layout.service';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-topbar',
@@ -20,14 +24,49 @@ import { Router, RouterModule } from '@angular/router';
     AvatarModule,
     InputTextModule,
     CommonModule,
-    ButtonModule
+    ButtonModule,
+    Menu,
+    FormsModule,
+    Popover,
+    Tooltip
   ],
   templateUrl: './topbar.component.html',
 })
 export class TopbarComponent {
 
     menuItem = input<MenuItem>();
-    hover: boolean = false;
+    _layoutService = inject(LayoutService);
+    options: MenuItem[] | undefined;
+
+    constructor() {
+      this.options = [
+        {
+          separator:true,
+        },
+        {
+          items: [
+            {
+              label:'Documentación',
+            },
+            {
+              label: 'Soporte'
+            },
+            {
+              separator: true
+            },
+            {
+              label: 'Settings',
+            },
+            {
+                label: 'Messages',
+            },
+            {
+                label: 'Cerrar sessión',
+            }
+          ]
+        }
+      ];
+    }
 
     _menuService = inject(MenuService);
     _router = inject(Router);
@@ -36,18 +75,15 @@ export class TopbarComponent {
         this._router.navigate(['/home']);
     }
 
-    toggleDarkMode() {
-      const element = document.querySelector('html');
-      element!.classList.toggle('dark');
-    }
+
 
     // Personalizacion del topbar
-    amberTolbar = {
+    topbarStyle = {
       border:{
         radius:'0px',
         color:'none'
       },
       background:'none',
-      padding:'none'
+      padding:'0.75rem'
     }
 }
