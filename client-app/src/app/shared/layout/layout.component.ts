@@ -15,9 +15,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit {
+
   selectedMenuItem = signal<MenuItem | undefined>(undefined);
 
-  // private route = inject(ActivatedRoute);
   private router = inject(Router);
   private _menuService = inject(MenuService);
   private routerSubscription: Subscription | undefined;

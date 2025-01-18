@@ -1,52 +1,56 @@
-<p-dataview #dv [value]="users()" [layout]="layout">
-      <ng-template #header>
-          <div class="flex justify-between">
-              <p-button label="Nuevo" />
+<div class="flex flex-col flex-nowrap" style="height: calc(100vh - 3.5rem);">
+  <header class="w-full flex-initial pt-2 px-4 pb-4">
+    <div class="flex justify-between items-center">
+      <p-button label="Nuevo" />
 
-              <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
-                  <ng-template #item let-item>
-                      <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
-                  </ng-template>
-              </p-selectbutton>
+      <p-autocomplete [(ngModel)]="value1" inputId="multiple-ac-1"
+      multiple fluid [suggestions]="items" (completeMethod)="search($event)"
+      [dropdown]="true"/>
+
+      <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+          <ng-template #item let-item>
+              <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+          </ng-template>
+      </p-selectbutton>
+    </div>
+  </header>
+
+  <main  class="h-full relative overflow-auto block flex-auto">
+    @if(layout === 'grid') {
+      <div class="grid grid-cols-12 gap-x-2">
+        @for (item of users(); track $index) {
+          <div class="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 md:p-1">
+            <a class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0
+            dark:bg-surface-900 block hover:cursor-pointer"
+            >
+              <div class="flex gap-4 ">
+                <p-avatar image="{{item.img}}"
+                class="flex items-center justify-center mr-2 !min-w-14 !h-16" size="xlarge" />
+                <main class="w-full">
+                  <div class="flex justify-between">
+                    <h2 class="text-lg font-bold">
+                      {{ item.username }}</h2>
+                    <p-tag
+                      [value]="item.isActive ? 'Active' : 'Inactive'"
+                      [severity]="item.isActive ? 'success' : 'danger'"
+                      styleClass="text-sm px-3 py-1 rounded-md  inline">
+                    </p-tag>
+                  </div>
+                  <div class="flex items-center gap-2 dark:text-gray-500 text-gray-700">
+                    <i class="pi pi-envelope"></i>
+                    <p class="">
+                        {{ item.email }}</p>
+                  </div>
+                </main>
+              </div>
+            </a>
           </div>
-      </ng-template>
+        }
+        </div>
+    }
 
-      <ng-template #grid let-items>
-        <div class="grid grid-cols-12 gap-x-2 pt-2 px-2">
-          @for (item of items; track $index) {
-            <div class="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 md:p-1">
-              <a class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0
-              dark:bg-surface-900 block hover:cursor-pointer"
-              >
-                <div class="flex gap-4 ">
-                  <p-avatar image="{{item.img}}"
-                  class="flex items-center justify-center mr-2 !min-w-14 !h-16" size="xlarge" />
-                  <main class="w-full">
-                    <div class="flex justify-between">
-                      <h2 class="text-lg font-bold">
-                        {{ item.username }}</h2>
-                      <p-tag
-                        [value]="item.isActive ? 'Active' : 'Inactive'"
-                        [severity]="item.isActive ? 'success' : 'danger'"
-                        styleClass="text-sm px-3 py-1 rounded-md  inline">
-                      </p-tag>
-                    </div>
-                    <div class="flex items-center gap-2 dark:text-gray-500 text-gray-700">
-                      <i class="pi pi-envelope"></i>
-                      <p class="">
-                         {{ item.email }}</p>
-                    </div>
-                  </main>
-                </div>
-              </a>
-            </div>
-          }
-          </div>
-      </ng-template>
-
-
-      <ng-template #list let-items>
-        <p-table [value]="items" selectionMode="single"
+    @if(layout === 'list') {
+      <p-table [value]="users()" selectionMode="single"
         [(selection)]="selectedUser"
         stripedRows
         [resizableColumns]="true"
@@ -69,11 +73,12 @@
                   <td>{{user.email}}</td>
                   <td>
                     <p-tag
-                    [value]="user.isActive ? 'Active' : 'Inactive'"
+                    [value]="user.isActive ? 'Activo' : 'Inactivo'"
                     [severity]="getSeverity(user)" />
                   </td>
               </tr>
           </ng-template>
       </p-table>
-      </ng-template>
-    </p-dataview>
+    }
+  </main>
+</div>

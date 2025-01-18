@@ -12,11 +12,18 @@ import { Tag } from 'primeng/tag';
 import { TableModule } from 'primeng/table';
 import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
+import { AutoComplete } from 'primeng/autocomplete';
+
+
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
+}
+
 
 @Component({
   selector: 'app-user',
   imports: [
-    DataView,
     CommonModule,
     FormsModule,
     ButtonModule,
@@ -26,6 +33,7 @@ import { CardModule } from 'primeng/card';
     TableModule,
     AvatarModule,
     CardModule,
+    AutoComplete
   ],
   templateUrl: './user.component.html',
 })
@@ -38,6 +46,14 @@ export class UserComponent {
   options = ['list', 'grid'];
 
   selectedUser!: User;
+
+  value1:string | undefined;
+
+  items: any[] = [];
+
+    search(event: AutoCompleteCompleteEvent) {
+        this.items = [...Array(10).keys()].map((item) => event.query + '-' + item);
+    }
 
   constructor() {
     const users: User[] = [

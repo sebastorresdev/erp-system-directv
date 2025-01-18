@@ -1,11 +1,11 @@
-<header class="flex flex-row w-full justify-between">
+<nav class="flex flex-row w-full justify-between h-14 p-3">
   <div class="flex flex-row items-center">
     @if(menuItem())
     {
       <i class="pi pi-arrow-left text-primary !text-xl
       transform transition-transform hover:scale-125 duration-200 hover:cursor-pointer mr-4"
       (click)="backtToHome()" ></i>
-      <h1 class="text-surface-600 text-xl font-bold">{{menuItem()?.label}}</h1>
+      <h1 class="text-surface-600 text-xl mr-4 font-bold">{{menuItem()?.label}}</h1>
       <p-menubar [model]="menuItem()?.items" [dt]="amberTolbar">
       </p-menubar>
     }
@@ -28,4 +28,4 @@
     <p>Sebastian Torres</p>
     <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="!w-10 !h-10" />
   </div>
-</header>
+</nav>
