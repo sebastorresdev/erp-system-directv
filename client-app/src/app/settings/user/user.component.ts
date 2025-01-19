@@ -47,6 +47,12 @@ export class UserComponent {
 
   selectedUser!: User;
 
+  selectedAutoValue: any = null;
+
+  autoValue: any[] | undefined;
+
+  autoFilteredValue: any[] = [];
+
   value1:string | undefined;
 
   items: any[] = [];
@@ -81,7 +87,7 @@ export class UserComponent {
 
 
 
-
+    this.autoValue = users;
     this.users.set(users);
   }
 
@@ -94,22 +100,19 @@ export class UserComponent {
   }
 
 
-  // Función para calcular el contraste entre el color de fondo y el color del texto
-getTextColor(backgroundColor: string): string {
-  const color = backgroundColor.replace(/^#/, ''); // Eliminar el "#" del color hex
-  const r = parseInt(color.substr(0, 2), 16);
-  const g = parseInt(color.substr(2, 2), 16);
-  const b = parseInt(color.substr(4, 2), 16);
+  filterCountry(event: AutoCompleteCompleteEvent) {
+    const filtered: any[] = [];
+    const query = event.query;
 
-  // Usar la fórmula para luminancia
-  const luminance = 0.2126 * this.adjustColor(r) + 0.7152 * this.adjustColor(g) + 0.0722 * this.adjustColor(b);
-  return luminance > 0.5 ? '#000000' : '#FFFFFF'; // Si la luminancia es alta, el texto es negro, si es baja, blanco
-}
-
-// Ajustar el valor de color para el cálculo de la luminancia
-adjustColor(color: number): number {
-  const c = color / 255;
-  return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    for (let i = 0; i < (this.autoValue as any[]).length; i++) {
+        const country = (this.autoValue as any[])[i];
+        console.log(country);
+        if (country.username.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+            filtered.push(country);
+        }
+    }
+    console.log("paso");
+    this.autoFilteredValue = filtered;
 }
 }
 

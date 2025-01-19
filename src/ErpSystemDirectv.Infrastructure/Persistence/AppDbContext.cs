@@ -1,4 +1,6 @@
-﻿using ErpSystemDirectv.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using ErpSystemDirectv.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ErpSystemDirectv.Infrastructure.Persistence;
@@ -1080,12 +1082,18 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("email");
             entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
+            entity.Property(e => e.Img)
+                .HasMaxLength(255)
+                .HasColumnName("img");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true)
                 .HasColumnName("is_active");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
                 .HasColumnName("is_deleted");
+            entity.Property(e => e.LastAuthentication)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("last_authentication");
             entity.Property(e => e.Password)
                 .HasMaxLength(256)
                 .HasColumnName("password");
@@ -1099,6 +1107,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.Employee).WithMany(p => p.Users)
                 .HasForeignKey(d => d.EmployeeId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("fk_users_employee");
         });
 

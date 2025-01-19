@@ -36,46 +36,17 @@ export class TopbarComponent {
 
     menuItem = input<MenuItem>();
     _layoutService = inject(LayoutService);
+    _menuService = inject(MenuService);
     options: MenuItem[] | undefined;
+    _router = inject(Router);
 
     constructor() {
-      this.options = [
-        {
-          separator:true,
-        },
-        {
-          items: [
-            {
-              label:'Documentación',
-            },
-            {
-              label: 'Soporte'
-            },
-            {
-              separator: true
-            },
-            {
-              label: 'Settings',
-            },
-            {
-                label: 'Messages',
-            },
-            {
-                label: 'Cerrar sessión',
-            }
-          ]
-        }
-      ];
+      this.options = this._menuService.getConfiguratinOptions();
     }
-
-    _menuService = inject(MenuService);
-    _router = inject(Router);
 
     backtToHome() : void {
         this._router.navigate(['/home']);
     }
-
-
 
     // Personalizacion del topbar
     topbarStyle = {

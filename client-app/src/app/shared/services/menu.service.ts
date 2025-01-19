@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
 
   private readonly _menuItems : MenuItem[] = [];
+  private readonly _configurationOptions : MenuItem[] = [];
 
   constructor() {
     this._menuItems = [
@@ -182,6 +184,29 @@ export class MenuService {
       }
     ];
 
+    this._configurationOptions = [
+      {
+        separator:true,
+      },
+      {
+        label:'Documentación',
+      },
+      {
+        label: 'Soporte'
+      },
+      {
+        separator: true
+      },
+      {
+        label: 'Settings',
+      },
+      {
+          label: 'Messages',
+      },
+      {
+          label: 'Cerrar sessión',
+      }
+    ];
 
   }
 
@@ -191,6 +216,10 @@ export class MenuService {
 
   getMenuItems() : MenuItem[] {
     return this._menuItems;
+  }
+
+  getConfiguratinOptions() : MenuItem[] {
+    return this._configurationOptions;
   }
 
 }

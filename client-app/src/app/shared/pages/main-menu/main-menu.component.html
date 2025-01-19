@@ -1,5 +1,5 @@
-<main class="w-auto flex items-start justify-center">
-    <div class="flex flex-wrap justify-start gap-x-12 gap-y-6 w-full max-w-4xl mt-32">
+<main class="w-full flex items-start justify-center px-4">
+  <div class="grid grid-cols-3 sm:grid-cols-6 xl:grid-cols-5 gap-x-1 gap-y-6 w-full max-w-5xl mt-28">
         @for (item of menuItem; track $index) {
             <app-option [menuItem]="item"/>
         }

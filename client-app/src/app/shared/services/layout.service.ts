@@ -7,8 +7,6 @@ export class LayoutService {
 
   isDarkTheme: boolean = true;
 
-  constructor() { }
-
   onThemeToggle(): void {
     this.isDarkTheme = !this.isDarkTheme;
     const element = document.querySelector('html');

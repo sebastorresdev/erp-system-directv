@@ -11,7 +11,7 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public Guid EmployeeId { get; set; }
+    public Guid? EmployeeId { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -21,9 +21,13 @@ public partial class User
 
     public bool IsDeleted { get; set; }
 
+    public string? Img { get; set; }
+
+    public DateTime? LastAuthentication { get; set; }
+
     public virtual ICollection<Bodega> Bodegas { get; set; } = new List<Bodega>();
 
-    public virtual Employee Employee { get; set; } = null!;
+    public virtual Employee? Employee { get; set; }
 
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
 
