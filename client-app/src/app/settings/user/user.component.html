@@ -1,10 +1,35 @@
 <div class="flex flex-col flex-nowrap" style="height: calc(100vh - 3.5rem);">
-  <header class="w-full flex-initial pt-2 px-4 pb-4">
+  <!-- <header class="w-full flex-initial pt-2 px-4 pb-4 shadow-md border-b border-surface-300 dark:border-surface-700">
     <div class="flex justify-between items-center">
-      <p-button label="Nuevo" />
+      <div class="flex gap-4 items-center">
+        <p-button label="Nuevo" />
+        <div>
+          <span class="text-2xl mr-2">Usuarios</span>
+        <span class="pi pi-cog hover:cursor-pointer" style="font-size: 1rem"></span>
+        </div>
 
-      <p-autocomplete [(ngModel)]="selectedAutoValue" [suggestions]="autoFilteredValue" optionLabel="username"
-       placeholder="Search" dropdown multiple display="chip" (completeMethod)="filterCountry($event)" />
+      </div>
+
+      <p-autocomplete [(ngModel)]="searchValues"
+      fluid multiple
+      dropdown
+      [suggestions]="items"
+      placeholder="Buscar por nombre usuario o email..."
+      class="w-[32rem]"
+      (onSelect)="selectedSearch($event)"
+      (onUnselect)="removeSelection()"
+      (completeMethod)="search($event)">
+      <ng-template let-value #item>
+        <div class="flex items-center gap-2">
+          <span>
+            Buscar <strong>Usuario</strong> para:
+          </span>
+          <span class="italic font-bold text-primary-500">
+            {{value}}
+          </span>
+        </div>
+      </ng-template>
+    </p-autocomplete>
 
       <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
           <ng-template #item let-item>
@@ -12,11 +37,52 @@
           </ng-template>
       </p-selectbutton>
     </div>
-  </header>
+  </header> -->
 
-  <main  class="h-full relative overflow-auto block flex-auto">
+  <p-toolbar [dt]="toolbarStyle">
+    <ng-template #start>
+      <p-button label="Nuevo" class="mr-2"/>
+        <p-button icon="pi pi-download" class="mr-2" text severity="secondary"
+        pTooltip="Exportar todo"
+        tooltipPosition="bottom"/>
+        <p-button icon="pi pi-upload" text severity="secondary"
+        pTooltip="Importar registros"
+        tooltipPosition="bottom" />
+    </ng-template>
+    <ng-template #center>
+      <p-autocomplete [(ngModel)]="searchValues"
+      fluid multiple
+      dropdown
+      [suggestions]="items"
+      placeholder="Buscar por nombre usuario o email..."
+      class="w-[32rem]"
+      (onSelect)="selectedSearch($event)"
+      (onUnselect)="removeSelection()"
+      (completeMethod)="search($event)">
+      <ng-template let-value #item>
+        <div class="flex items-center gap-2">
+          <span>
+            Buscar <strong>Usuario</strong> para:
+          </span>
+          <span class="italic font-bold text-primary-500">
+            {{value}}
+          </span>
+        </div>
+      </ng-template>
+    </p-autocomplete>
+    </ng-template>
+    <ng-template #end>
+      <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+        <ng-template #item let-item>
+            <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+        </ng-template>
+    </p-selectbutton>
+    </ng-template>
+</p-toolbar>
+
+  <main  class="h-full relative overflow-auto block flex-auto bg-surface-100 dark:bg-surface-950 pt-1 pb-4">
     @if(layout === 'grid') {
-      <div class="grid grid-cols-12 gap-x-2">
+      <div class="grid grid-cols-12 gap-x-2 mt-2 mx-4">
         @for (item of users(); track $index) {
           <div class="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3 md:p-1">
             <a class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0
@@ -30,8 +96,8 @@
                     <h2 class="text-lg font-bold">
                       {{ item.username }}</h2>
                     <p-tag
-                      [value]="item.isActive ? 'Active' : 'Inactive'"
-                      [severity]="item.isActive ? 'success' : 'danger'"
+                      [value]="item.status"
+                      [severity]="getSeverity(item)"
                       styleClass="text-sm px-3 py-1 rounded-md  inline">
                     </p-tag>
                   </div>
@@ -51,33 +117,39 @@
     @if(layout === 'list') {
       <p-table [value]="users()" selectionMode="single"
         [(selection)]="selectedUser"
-        [dt]="tableStyle"
         [resizableColumns]="true"
         columnResizeMode="expand"
         dataKey="id"
         (onRowSelect)="onRowSelect($event)"
         [tableStyle]="{'min-width': '50rem'}">
           <ng-template #header>
-              <tr class="!bg-red-400">
-                  <th pResizableColumn pSortableColumn="id">Code</th>
+              <tr>
                   <th pResizableColumn pSortableColumn="username">Username</th>
                   <th pResizableColumn pSortableColumn="email">Email</th>
+                  <th pResizableColumn pSortableColumn="isActive">Última conexión</th>
                   <th pResizableColumn pSortableColumn="isActive">Estado</th>
               </tr>
           </ng-template>
           <ng-template #body let-user>
               <tr [pSelectableRow]="user">
-                  <td>{{user.id}}</td>
                   <td>{{user.username}}</td>
                   <td>{{user.email}}</td>
+                  <td>{{user.lastAuthentication}}</td>
                   <td>
                     <p-tag
-                    [value]="user.isActive ? 'Activo' : 'Inactivo'"
+                    [value]="user.status"
                     [severity]="getSeverity(user)" />
                   </td>
               </tr>
           </ng-template>
       </p-table>
+    }
+
+    @if(users().length === 0) {
+      <p class="text-center text-gray-500 text-3xl mt-32">
+        No se encontraron usuarios con los criterios especificados.
+      </p>
+
     }
   </main>
 </div>

@@ -10,6 +10,11 @@ public static class UserMappingExtension
         return new UserResponse(
                     result.Id,
                     result.Username,
-                    result.Email is null ? string.Empty : result.Email);
+                    result.Email,
+                    result.IsActive? "Activo" : "Inactivo",
+                    result.Img,
+                    result.EmployeeId,
+                    result.LastAuthentication?.ToString("dd/MM/yyyy HH:mm:ss")
+                    );
     }
 }

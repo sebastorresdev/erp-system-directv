@@ -32,4 +32,20 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
         return user;
     }
+
+    public async Task<List<User>> GetUsersByUsernameOrEmail(string search)
+    {
+        var query = _context.Users.Where(u => !u.IsDeleted);
+
+        query = query.Where(u =>
+            u.Username.Contains(search) ||
+            u.Email.Contains(search));
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<User>> GetAllUsers()
+    {
+        return await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+    }
 }

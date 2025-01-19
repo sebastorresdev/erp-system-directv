@@ -2,10 +2,3 @@
 
 POST {{host}}/api/user
 Content-Type: application/json
-
-{
-    "Username":"2",
-    "Password":"",
-    "Email":"storres@vconnection.pe",
-    "EmployeeId":"193480ca-cd76-4c93-999b-ca97fe902559"
-}

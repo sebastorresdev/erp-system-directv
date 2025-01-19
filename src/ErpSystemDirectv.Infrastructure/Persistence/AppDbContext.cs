@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ErpSystemDirectv.Domain.Entities;
+﻿using ErpSystemDirectv.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ErpSystemDirectv.Infrastructure.Persistence;
@@ -1072,6 +1070,8 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("users_pkey");
 
             entity.ToTable("users");
+
+            entity.HasIndex(e => e.Email, "users_email_key").IsUnique();
 
             entity.HasIndex(e => e.Username, "users_username_key").IsUnique();
 

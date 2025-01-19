@@ -15,7 +15,11 @@ export class UserService {
   private readonly _http = inject(HttpClient);
 
   getUsers() : Observable<User[]> {
-    return this._http.get<User[]>(this.userUrl);
+    return this._http.get<User[]>(`${this.userUrl}/all`);
+  }
+
+  getUsersByUsernameOrEmail(search:string) : Observable<User[]> {
+    return this._http.get<User[]>(`${this.userUrl}?search=${search}`);
   }
 
 }

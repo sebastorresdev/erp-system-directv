@@ -1,5 +1,7 @@
 using ErpSystemDirectv.Api.Extensions;
 using ErpSystemDirectv.Application.Users.Commands.CreateUser;
+using ErpSystemDirectv.Application.Users.Queries.GetUser;
+using ErpSystemDirectv.Application.Users.Queries.ListUser;
 using ErpSystemDirectv.Contracts.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +27,30 @@ public class UserController : ApiController
 
         return userResult.Match(
             result => Ok(result.MapToUserResponse()),
+            Problem);
+    }
+
+    [HttpGet("user")]
+    public async Task<IActionResult> GetUsersByUsernameOrEmail([FromQuery] string search)
+    {
+        var query = new GetUsersByUsernameOrEmailQuery(search);
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response.Select(r => r.MapToUserResponse())),
+            Problem);
+    }
+
+    [HttpGet("user/all")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var query = new ListUsersQuery();
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response.Select(r => r.MapToUserResponse())),
             Problem);
     }
 }

@@ -6,4 +6,6 @@ public interface IUserRepository
 {
     Task<User?> GetUserByUsername(string username);
     Task<User> CreateUser(User user);
+    Task<List<User>> GetAllUsers();
+    Task<List<User>> GetUsersByUsernameOrEmail(string search);
 }

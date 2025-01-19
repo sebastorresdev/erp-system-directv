@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ErpSystemDirectv.Domain.Entities;
+﻿namespace ErpSystemDirectv.Domain.Entities;
 
 public partial class User
 {
@@ -17,7 +14,7 @@ public partial class User
 
     public DateTime RegistrationDate { get; set; }
 
-    public string? Email { get; set; }
+    public string Email { get; set; } = null!;
 
     public bool IsDeleted { get; set; }
 

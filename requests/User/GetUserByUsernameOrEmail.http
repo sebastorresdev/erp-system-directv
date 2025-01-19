@@ -1,0 +1,5 @@
+@host=http://localhost:5026
+
+GET  {{host}}/api/user?search=exam
+
+
