@@ -5,8 +5,6 @@
 
       <p-autocomplete [(ngModel)]="selectedAutoValue" [suggestions]="autoFilteredValue" optionLabel="username"
        placeholder="Search" dropdown multiple display="chip" (completeMethod)="filterCountry($event)" />
-      <!-- <p-autocomplete [(ngModel)]="value1" multiple fluid [suggestions]="items" (completeMethod)="search($event)"
-      [dropdown]="true" class="hidden md:block md:min-w-96"/> -->
 
       <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
           <ng-template #item let-item>
@@ -53,14 +51,14 @@
     @if(layout === 'list') {
       <p-table [value]="users()" selectionMode="single"
         [(selection)]="selectedUser"
-        stripedRows
+        [dt]="tableStyle"
         [resizableColumns]="true"
         columnResizeMode="expand"
         dataKey="id"
         (onRowSelect)="onRowSelect($event)"
         [tableStyle]="{'min-width': '50rem'}">
           <ng-template #header>
-              <tr>
+              <tr class="!bg-red-400">
                   <th pResizableColumn pSortableColumn="id">Code</th>
                   <th pResizableColumn pSortableColumn="username">Username</th>
                   <th pResizableColumn pSortableColumn="email">Email</th>

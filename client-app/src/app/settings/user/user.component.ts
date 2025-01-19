@@ -113,6 +113,36 @@ export class UserComponent {
     }
     console.log("paso");
     this.autoFilteredValue = filtered;
-}
-}
+  }
 
+  tableStyle = {
+    //   colorScheme: {
+    //     light: {
+    //         header: {
+    //             background: '{surface.300}',
+    //             cell:{
+    //               background: '{surface.300}',
+    //             }
+    //         },
+    //         row: {
+    //           striped: {
+    //             background:'{surface.50}'
+    //           }
+    //         }
+    //     },
+    //     dark: {
+    //       header: {
+    //         background: '{surface.700}',
+    //         cell:{
+    //           background: '{surface.700}',
+    //         }
+    //       },
+    //       row: {
+    //         striped: {
+    //           background:'{surface.850}'
+    //         }
+    //       }
+    //     }
+    // }
+  }
+}

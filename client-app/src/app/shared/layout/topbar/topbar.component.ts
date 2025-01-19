@@ -49,7 +49,7 @@ export class TopbarComponent {
     }
 
     // Personalizacion del topbar
-    topbarStyle = {
+    menubarStyle = {
       border:{
         radius:'0px',
         color:'none'
