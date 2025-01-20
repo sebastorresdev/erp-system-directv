@@ -1,0 +1,94 @@
+<div class="flex flex-col h-full flex-nowrap">
+  <p-toolbar [dt]="toolbarStyle">
+    <ng-template #start>
+      <p-button label="Nuevo" class="mx-4" variant="outlined"/>
+        <div class="flex flex-col mr-2">
+          <span class="text-primary">Usuarios</span>
+          <span class="text-surface-700 dark:text-surface-100">Nuevo</span>
+        </div>
+        <p-button icon="pi pi-save" text severity="secondary" />
+        <p-button icon="pi pi-times" text severity="secondary" (click)="cancel()"/>
+    </ng-template>
+    <ng-template #center>
+    </ng-template>
+    <ng-template #end>
+    </ng-template>
+  </p-toolbar>
+
+  <main class="h-full relative overflow-auto block flex-auto pt-6 px-4 bg-surface-100 dark:bg-surface-950">
+    <div class="mx-auto p-6 bg-white dark:bg-surface-900 rounded shadow-md">
+
+      <div class="lg:w-9/12 w-full">
+
+        <div class="flex flex-row gap-4 mb-4">
+          <!-- Inputs -->
+          <div class="flex flex-col gap-4 flex-1">
+            <div class="flex flex-col gap-4">
+              <label for="username">Nombre</label>
+              <input pInputText [(ngModel)]="value2" type="text" placeholder="Nombre usuario" pSize="large"/>
+            </div>
+            <div class="flex flex-col gap-4">
+              <label for="email">Correo electrónico</label>
+              <input pInputText [(ngModel)]="value3" type="text" placeholder="Correo electrónico" />
+            </div>
+          </div>
+
+          <!-- Imagen -->
+          <div class="flex items-end flex-col gap-5 justify-start md:w-48 lg:w-80 xl:w-96">
+            <div class="w-24 h-24 md:w-32 md:h-32 bg-surface-400">
+              <img src="placeholder.png" alt="foto">
+            </div>
+          </div>
+        </div>
+
+        <p-tabs value="0">
+          <p-tablist>
+              <p-tab value="0">Permisos de accesos</p-tab>
+              <p-tab value="1">Seguridad</p-tab>
+          </p-tablist>
+          <p-tabpanels>
+              <p-tabpanel value="0">
+
+                <div class="pt-12">
+                  <span class="text-lg font-semibold mb-2 block">INVENTARIO</span>
+                  <hr class="mb-6">
+                  <div class="flex items-center gap-6">
+                    <div class="flex">
+                      <label for="ventas" class="font-medium">Inventario</label>
+                      <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                      pTooltip="Le ayuda a gestionar su inventario y las operaciones principales de stock
+
+                      El Usuario Auxiliar Almacén se encarga de tareas de apoyo como registrar entradas y salidas de productos y consultar el inventario básico, teniendo acceso limitado a los datos.
+                      El Usuario Almacén es responsable de la gestión completa del inventario, incluyendo la creación, actualización, eliminación y supervisión de productos, categorías y remisiones.
+                      Finalmente, el Administrador tiene acceso completo al sistema, permitiéndole gestionar usuarios, permisos y configuraciones globales, además de supervisar todas las operaciones."
+                      tooltipPosition="bottom"
+                      tooltipStyleClass="!text-sm !rounded-lg !p-3 !shadow-lg !max-w-xs !break-words !text-justify"></span>
+                    </div>
+                    <p-select
+                      id="ventas"
+                      [options]="list"
+                      [showClear]="true"
+                      [(ngModel)]="value1"
+                      optionLabel="name"
+                      class="w-full md:w-56"
+                    ></p-select>
+                  </div>
+                </div>
+              </p-tabpanel>
+              <p-tabpanel value="1">
+                  <p class="m-0">
+                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
+                      aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                      Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+                      dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius
+                      modi.
+                  </p>
+              </p-tabpanel>
+          </p-tabpanels>
+        </p-tabs>
+      </div>
+
+    </div>
+  </main>
+
+</div>

@@ -15,6 +15,7 @@ import { AutoComplete } from 'primeng/autocomplete';
 import { UserService } from '../services/user.service';
 import { Toolbar } from 'primeng/toolbar';
 import { Tooltip } from 'primeng/tooltip';
+import { Router } from '@angular/router';
 
 
 interface AutoCompleteCompleteEvent {
@@ -47,6 +48,7 @@ export class UserComponent {
   users = signal<User[]>([]);
 
   private readonly _userService = inject(UserService)
+  private readonly _router = inject(Router)
 
   options = ['list', 'grid'];
 
@@ -94,6 +96,10 @@ export class UserComponent {
 
   search(event: AutoCompleteCompleteEvent) {
     this.items = [...Array(1).keys()].map(_ => event.query);
+  }
+
+  newUser() {
+    this._router.navigate(['ajustes/usuarios/nuevo'])
   }
 
   toolbarStyle = {

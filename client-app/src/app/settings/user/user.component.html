@@ -1,53 +1,20 @@
-<div class="flex flex-col flex-nowrap" style="height: calc(100vh - 3.5rem);">
-  <!-- <header class="w-full flex-initial pt-2 px-4 pb-4 shadow-md border-b border-surface-300 dark:border-surface-700">
-    <div class="flex justify-between items-center">
-      <div class="flex gap-4 items-center">
-        <p-button label="Nuevo" />
-        <div>
-          <span class="text-2xl mr-2">Usuarios</span>
-        <span class="pi pi-cog hover:cursor-pointer" style="font-size: 1rem"></span>
-        </div>
-
-      </div>
-
-      <p-autocomplete [(ngModel)]="searchValues"
-      fluid multiple
-      dropdown
-      [suggestions]="items"
-      placeholder="Buscar por nombre usuario o email..."
-      class="w-[32rem]"
-      (onSelect)="selectedSearch($event)"
-      (onUnselect)="removeSelection()"
-      (completeMethod)="search($event)">
-      <ng-template let-value #item>
-        <div class="flex items-center gap-2">
-          <span>
-            Buscar <strong>Usuario</strong> para:
-          </span>
-          <span class="italic font-bold text-primary-500">
-            {{value}}
-          </span>
-        </div>
-      </ng-template>
-    </p-autocomplete>
-
-      <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
-          <ng-template #item let-item>
-              <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
-          </ng-template>
-      </p-selectbutton>
-    </div>
-  </header> -->
-
+<div class="flex flex-col h-full flex-nowrap">
   <p-toolbar [dt]="toolbarStyle">
     <ng-template #start>
-      <p-button label="Nuevo" class="mr-2"/>
-        <p-button icon="pi pi-download" class="mr-2" text severity="secondary"
-        pTooltip="Exportar todo"
-        tooltipPosition="bottom"/>
-        <p-button icon="pi pi-upload" text severity="secondary"
-        pTooltip="Importar registros"
-        tooltipPosition="bottom" />
+      <p-button label="Nuevo" class="mx-4" (click)="newUser()"/>
+      <span class="text-xl mr-2">Usuarios</span>
+      <p-button icon="pi pi-download" severity="secondary"
+      text
+      pTooltip="Exportar todo"
+      tooltipPosition="bottom"/>
+      <p-button icon="pi pi-upload" severity="secondary"
+      text
+      pTooltip="Importar registros"
+      tooltipPosition="bottom" />
+      <p-button icon="pi pi-trash" severity="secondary"
+      pTooltip="Eliminar registros"
+      text
+      tooltipPosition="bottom" />
     </ng-template>
     <ng-template #center>
       <p-autocomplete [(ngModel)]="searchValues"
@@ -72,15 +39,15 @@
     </p-autocomplete>
     </ng-template>
     <ng-template #end>
-      <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false">
+      <p-selectbutton [(ngModel)]="layout" [options]="options" [allowEmpty]="false" class="mr-4">
         <ng-template #item let-item>
             <i class="pi " [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
         </ng-template>
     </p-selectbutton>
     </ng-template>
-</p-toolbar>
+  </p-toolbar>
 
-  <main  class="h-full relative overflow-auto block flex-auto bg-surface-100 dark:bg-surface-950 pt-1 pb-4">
+  <main class="flex-auto relative overflow-auto block bg-surface-100 dark:bg-surface-950 p-8">
     @if(layout === 'grid') {
       <div class="grid grid-cols-12 gap-x-2 mt-2 mx-4">
         @for (item of users(); track $index) {

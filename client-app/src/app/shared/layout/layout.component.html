@@ -1,9 +1,10 @@
-<header class="block relative">
-  <app-topbar [menuItem]="selectedMenuItem()"></app-topbar>
-</header>
+<div class="h-screen flex flex-col">
+  <header class="block relative">
+    <app-topbar [menuItem]="selectedMenuItem()"></app-topbar>
+  </header>
 
-<!-- Contenido desplazable -->
-<main class="flex-auto h-full block overflow-hidden">
-    <router-outlet></router-outlet>
-</main>
-
+  <!-- Contenido desplazable -->
+  <main class="flex-auto block overflow-hidden">
+      <router-outlet></router-outlet>
+  </main>
+</div>
