@@ -29,6 +29,10 @@ export class CreateEditUserComponent {
   value1:any;
   value2:any;
   value3:any;
+  value4:any;
+  value5:any;
+  value6:any;
+  value7:any;
   list:any[] = [];
 
   private readonly _router = inject(Router);

@@ -49,31 +49,115 @@
           <p-tabpanels>
               <p-tabpanel value="0">
 
-                <div class="pt-12">
-                  <span class="text-lg font-semibold mb-2 block">INVENTARIO</span>
-                  <hr class="mb-6">
-                  <div class="flex items-center gap-6">
-                    <div class="flex">
-                      <label for="ventas" class="font-medium">Inventario</label>
-                      <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
-                      pTooltip="Le ayuda a gestionar su inventario y las operaciones principales de stock
-
-                      El Usuario Auxiliar Almacén se encarga de tareas de apoyo como registrar entradas y salidas de productos y consultar el inventario básico, teniendo acceso limitado a los datos.
-                      El Usuario Almacén es responsable de la gestión completa del inventario, incluyendo la creación, actualización, eliminación y supervisión de productos, categorías y remisiones.
-                      Finalmente, el Administrador tiene acceso completo al sistema, permitiéndole gestionar usuarios, permisos y configuraciones globales, además de supervisar todas las operaciones."
-                      tooltipPosition="bottom"
-                      tooltipStyleClass="!text-sm !rounded-lg !p-3 !shadow-lg !max-w-xs !break-words !text-justify"></span>
+                <!-- PODRIA SER DINAMICO ESTO -->
+                 <!-- PENSAR SI SE GUARDA EN UNA BASE DE DATOS Y ESTO SE OBTENGA DE ALLI -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
+                  <!-- INVENTARIO -->
+                  <div>
+                    <span class="text-lg font-semibold mb-2 block">INVENTARIO</span>
+                    <hr class="mb-6">
+                    <div class="flex flex-col gap-6">
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="inventario" class="font-medium">Inventario</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Le ayuda a gestionar su inventario y las operaciones principales de stock. El Usuario Auxiliar Almacén se encarga de tareas de apoyo como registrar entradas y salidas de productos y consultar el inventario básico, teniendo acceso limitado a los datos. El Usuario Almacén es responsable de la gestión completa del inventario, incluyendo la creación, actualización, eliminación y supervisión de productos, categorías y remisiones. Finalmente, el Administrador tiene acceso completo al sistema, permitiéndole gestionar usuarios, permisos y configuraciones globales, además de supervisar todas las operaciones."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="inventario" [options]="list" [showClear]="true" [(ngModel)]="value1" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="inventario" class="font-medium">Compra</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                              pTooltip="Le ayuda a gestionar su inventario y las operaciones principales de stock. El Usuario Auxiliar Almacén se encarga de tareas de apoyo como registrar entradas y salidas de productos y consultar el inventario básico, teniendo acceso limitado a los datos. El Usuario Almacén es responsable de la gestión completa del inventario, incluyendo la creación, actualización, eliminación y supervisión de productos, categorías y remisiones. Finalmente, el Administrador tiene acceso completo al sistema, permitiéndole gestionar usuarios, permisos y configuraciones globales, además de supervisar todas las operaciones."
+                              tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                          </div>
+                        <p-select id="compra" [options]="list" [showClear]="true" [(ngModel)]="value2" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
                     </div>
-                    <p-select
-                      id="ventas"
-                      [options]="list"
-                      [showClear]="true"
-                      [(ngModel)]="value1"
-                      optionLabel="name"
-                      class="w-full md:w-56"
-                    ></p-select>
+                  </div>
+                  <!-- VENTAS -->
+                  <div>
+                    <span class="text-lg font-semibold mb-2 block">VENTAS</span>
+                    <hr class="mb-6">
+                    <div class="flex flex-col gap-6">
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="ventas" class="font-medium">Ventas</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Gestión de las ventas realizadas, donde podrás consultar detalles de cada transacción."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="ventas" [options]="list" [showClear]="true" [(ngModel)]="value4" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                      <!-- colocar aqui las diferentes opciones adicionales -->
+                      <!-- AQUI -->
+                    </div>
+                  </div>
+                  <!-- RECURSOS HUMANOS -->
+                  <div>
+                    <span class="text-lg font-semibold mb-2 block">RECURSOS HUMANOS</span>
+                    <hr class="mb-6">
+                    <div class="flex flex-col gap-6">
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="empleados" class="font-medium">Empleados</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Gestión de los empleados de la empresa, donde podrás ver sus datos, estado y gestionar información personal."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="empleados" [options]="list" [showClear]="true" [(ngModel)]="value3" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                      <!-- colocar aqui las diferentes opciones adicionales -->
+                       <!-- AQUI -->
+                    </div>
+                  </div>
+                  <!-- PRODUCTIVIDAD -->
+                  <div>
+                    <span class="text-lg font-semibold mb-2 block">PRODUCTIVIDAD</span>
+                    <hr class="mb-6">
+                    <div class="flex flex-col gap-6">
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="reportes" class="font-medium">Reportes</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Accede a los reportes de productividad, donde podrás consultar estadísticas e información relevante."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="reportes" [options]="list" [showClear]="true" [(ngModel)]="value5" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                      <!-- colocar aqui las diferentes opciones adicionales -->
+                       <!-- AQUI -->
+                    </div>
+                  </div>
+                  <!-- SERVICIOS -->
+                  <div>
+                    <span class="text-lg font-semibold mb-2 block">SERVICIOS</span>
+                    <hr class="mb-6">
+                    <div class="flex flex-col gap-6">
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="instalaciones" class="font-medium">Instalaciones</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Gestiona las instalaciones de los servicios, donde podrás ver detalles y el estado de cada instalación."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="instalaciones" [options]="list" [showClear]="true" [(ngModel)]="value6" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                      <div class="flex items-center w-full">
+                        <div class="flex w-1/3">
+                          <label for="desconexiones" class="font-medium">Desconexiones</label>
+                          <span class="pi pi-question-circle" style="color: cyan;font-size: 0.8rem"
+                            pTooltip="Accede a la gestión de desconexiones, donde podrás consultar el estado y los detalles de las desconexiones de servicio."
+                            tooltipPosition="bottom" tooltipStyleClass="!text-sm !break-words !text-justify"></span>
+                        </div>
+                        <p-select id="desconexiones" [options]="list" [showClear]="true" [(ngModel)]="value7" optionLabel="name" class="!w-full md:!w-56"></p-select>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
               </p-tabpanel>
               <p-tabpanel value="1">
                   <p class="m-0">
