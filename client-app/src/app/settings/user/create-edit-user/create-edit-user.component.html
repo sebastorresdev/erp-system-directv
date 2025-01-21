@@ -6,7 +6,8 @@
           <span class="text-primary">Usuarios</span>
           <span class="text-surface-700 dark:text-surface-100">Nuevo</span>
         </div>
-        <p-button icon="pi pi-save" text severity="secondary" />
+        <p-toast />
+        <p-button icon="pi pi-save" text severity="secondary" (click)="addUser()" pRipple/>
         <p-button icon="pi pi-times" text severity="secondary" (click)="cancel()"/>
     </ng-template>
     <ng-template #center>
@@ -22,16 +23,18 @@
 
         <div class="flex flex-row gap-4 mb-4">
           <!-- Inputs -->
-          <div class="flex flex-col gap-4 flex-1">
+          <form [formGroup]="userForm" class="flex flex-col gap-6 flex-1">
             <div class="flex flex-col gap-4">
-              <label for="username">Nombre</label>
-              <input pInputText [(ngModel)]="value2" type="text" placeholder="Nombre usuario" pSize="large"/>
+              <label for="username" class="font-bold">Nombre</label>
+              <input pInputText type="text" placeholder="Nombre usuario" autofocus pSize="large"
+              formControlName="username"/>
             </div>
             <div class="flex flex-col gap-4">
-              <label for="email">Correo electrónico</label>
-              <input pInputText [(ngModel)]="value3" type="text" placeholder="Correo electrónico" />
+              <label for="email" class="font-bold">Correo electrónico</label>
+              <input pInputText type="text" placeholder="Correo electrónico" formControlName="email"
+              />
             </div>
-          </div>
+          </form>
 
           <!-- Imagen -->
           <div class="flex items-end flex-col gap-5 justify-start md:w-48 lg:w-80 xl:w-96">
@@ -50,7 +53,7 @@
               <p-tabpanel value="0">
 
                 <!-- PODRIA SER DINAMICO ESTO -->
-                 <!-- PENSAR SI SE GUARDA EN UNA BASE DE DATOS Y ESTO SE OBTENGA DE ALLI -->
+                <!-- PENSAR SI SE GUARDA EN UNA BASE DE DATOS Y ESTO SE OBTENGA DE ALLI -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-14">
                   <!-- INVENTARIO -->
                   <div>
