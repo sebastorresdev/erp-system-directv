@@ -3,19 +3,15 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class UserRoleBranch
+public partial class UserCompany
 {
     public Guid Id { get; set; }
 
     public Guid UserId { get; set; }
 
-    public Guid RoleId { get; set; }
+    public Guid CompanyId { get; set; }
 
-    public Guid BranchId { get; set; }
-
-    public virtual Branch Branch { get; set; } = null!;
-
-    public virtual Role Role { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

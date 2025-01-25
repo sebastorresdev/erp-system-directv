@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class Permission
+public partial class WoStatus
 {
     public Guid Id { get; set; }
 
@@ -11,9 +11,11 @@ public partial class Permission
 
     public string? Description { get; set; }
 
-    public bool? Active { get; set; }
-
     public DateTime? CreateDate { get; set; }
 
-    public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+    public bool? Active { get; set; }
+
+    public string? Color { get; set; }
+
+    public virtual ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
 }

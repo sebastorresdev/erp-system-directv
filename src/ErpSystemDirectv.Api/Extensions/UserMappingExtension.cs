@@ -11,7 +11,7 @@ public static class UserMappingExtension
                     result.Id,
                     result.Username,
                     result.Email,
-                    result.IsActive? "Activo" : "Inactivo",
+                    result.Active == true ? "Activo" : "Inactivo",
                     result.Img,
                     result.EmployeeId,
                     result.LastAuthentication?.ToString("dd/MM/yyyy HH:mm:ss")

@@ -17,7 +17,7 @@ public class LoginQueryHandle : IRequestHandler<LoginQuery, ErrorOr<LoginResult>
 
     public async Task<ErrorOr<LoginResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByUsername(query.Username);
+        var user = await _userRepository.GetUserWithRolesAndPermissionsAsync(query.Username);
 
         if (user == null)
         {
@@ -29,12 +29,12 @@ public class LoginQueryHandle : IRequestHandler<LoginQuery, ErrorOr<LoginResult>
             return Error.Unauthorized(description: "Contraseña incorrecta");
         }
 
-        var permissions = user.UserRoles.SelectMany(ur => ur.Role.RolePermissions
+        var permissions = user.UserRoleUsers.SelectMany(ur => ur.Role.RolePermissions
                 .Select(rp => rp.Permission.Name))
                 .Distinct()
                 .ToList();
 
-        var roles = user.UserRoles.Select(ur => ur.Role.Name).ToList();
+        var roles = user.UserRoleUsers.Select(ur => ur.Role.Name).ToList();
 
         var token = _jwtTokenGenerator.GenerateToken(user.Id, query.Username, permissions, roles);
 

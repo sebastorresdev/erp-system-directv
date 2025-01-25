@@ -3,17 +3,13 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class UserRole
+public partial class PhoneType
 {
     public Guid Id { get; set; }
 
-    public Guid UserId { get; set; }
-
-    public Guid RoleId { get; set; }
+    public string Name { get; set; } = null!;
 
     public DateTime? CreateDate { get; set; }
-
-    public bool? Active { get; set; }
 
     public DateTime? WriteDate { get; set; }
 
@@ -23,9 +19,7 @@ public partial class UserRole
 
     public virtual User? CreateU { get; set; }
 
-    public virtual Role Role { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
+    public virtual ICollection<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
 
     public virtual User? WriteU { get; set; }
 }

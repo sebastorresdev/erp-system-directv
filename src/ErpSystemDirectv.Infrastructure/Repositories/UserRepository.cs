@@ -17,13 +17,8 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetUserByUsername(string userName)
     {
         return await _context.Users
-            .Where(u => !u.IsDeleted && u.Username == userName)
-            .Include(u => u.Employee)
-            .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                    .ThenInclude(r => r.RolePermissions)
-                        .ThenInclude(rp => rp.Permission)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(u => u.Active == true && u.Username == userName);
+            
     }
 
     public async Task<User> CreateUser(User user)
@@ -35,7 +30,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetUsersByUsernameOrEmail(string search)
     {
-        var query = _context.Users.Where(u => !u.IsDeleted);
+        var query = _context.Users.Where(u => u.Active == true);
 
         query = query.Where(u =>
             u.Username.Contains(search) ||
@@ -46,6 +41,16 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetAllUsers()
     {
-        return await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+        return await _context.Users.Where(u => u.Active == true).ToListAsync();
+    }
+
+    public async Task<User?> GetUserWithRolesAndPermissionsAsync(string username)
+    {
+        return await _context.Users
+            .Include(u => u.UserRoleUsers)
+            .ThenInclude(ur => ur.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
+            .FirstOrDefaultAsync(u => u.Username == username);
     }
 }

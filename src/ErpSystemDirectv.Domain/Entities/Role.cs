@@ -9,15 +9,17 @@ public partial class Role
 
     public string Name { get; set; } = null!;
 
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool? Active { get; set; }
 
-    public DateTime RegistrationDate { get; set; }
+    public DateTime? CreateDate { get; set; }
+
+    public Guid? ModuleId { get; set; }
+
+    public virtual Module? Module { get; set; }
 
     public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
-
-    public virtual ICollection<UserRoleBranch> UserRoleBranches { get; set; } = new List<UserRoleBranch>();
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

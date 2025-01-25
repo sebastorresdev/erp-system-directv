@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class Transaction
+public partial class Sequencial
 {
     public Guid Id { get; set; }
 

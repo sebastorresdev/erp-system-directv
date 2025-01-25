@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
@@ -7,45 +8,55 @@ public partial class Product
 {
     public Guid Id { get; set; }
 
-    public string SkuCode { get; set; } = null!;
+    public string? Sku { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public string? Description { get; set; }
+    public BitArray? Description { get; set; }
 
-    public Guid? CategoryId { get; set; }
+    public Guid? ProductTemplateId { get; set; }
 
     public string? Model { get; set; }
 
-    public decimal? Price { get; set; }
+    public decimal? SalePrice { get; set; }
 
-    public Guid UnitOfMeasurementId { get; set; }
+    public Guid? UomId { get; set; }
 
-    public Guid SupplierId { get; set; }
-
-    public string Type { get; set; } = null!;
-
-    public string Family { get; set; } = null!;
+    public Guid? SupplierId { get; set; }
 
     public string? Image { get; set; }
 
-    public bool IsSerializable { get; set; }
+    public bool? Active { get; set; }
 
-    public bool IsActive { get; set; }
+    public DateTime? CreateDate { get; set; }
 
-    public DateTime RegistrationDate { get; set; }
+    public DateTime? WriteDate { get; set; }
 
-    public virtual Category? Category { get; set; }
+    public string? Color { get; set; }
 
-    public virtual ICollection<ProductMovementItem> ProductMovementItems { get; set; } = new List<ProductMovementItem>();
+    public decimal? PurchasePrice { get; set; }
 
-    public virtual ICollection<SerializedProductStock> SerializedProductStocks { get; set; } = new List<SerializedProductStock>();
+    public string? Barcode { get; set; }
 
-    public virtual ICollection<StockProduct> StockProducts { get; set; } = new List<StockProduct>();
+    public Guid? CreateUid { get; set; }
 
-    public virtual Supplier Supplier { get; set; } = null!;
+    public Guid? WriteUid { get; set; }
 
-    public virtual UnitsOfMeasurement UnitOfMeasurement { get; set; } = null!;
+    public virtual User? CreateU { get; set; }
 
-    public virtual ICollection<WarehouseProduct> WarehouseProducts { get; set; } = new List<WarehouseProduct>();
+    public virtual ICollection<ProductCompany> ProductCompanies { get; set; } = new List<ProductCompany>();
+
+    public virtual ProductTemplate? ProductTemplate { get; set; }
+
+    public virtual ICollection<StockMove> StockMoves { get; set; } = new List<StockMove>();
+
+    public virtual ICollection<StockProductionLot> StockProductionLots { get; set; } = new List<StockProductionLot>();
+
+    public virtual ICollection<StockQuant> StockQuants { get; set; } = new List<StockQuant>();
+
+    public virtual Supplier? Supplier { get; set; }
+
+    public virtual Uom? Uom { get; set; }
+
+    public virtual User? WriteU { get; set; }
 }

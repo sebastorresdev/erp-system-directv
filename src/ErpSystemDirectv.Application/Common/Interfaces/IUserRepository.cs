@@ -8,4 +8,6 @@ public interface IUserRepository
     Task<User> CreateUser(User user);
     Task<List<User>> GetAllUsers();
     Task<List<User>> GetUsersByUsernameOrEmail(string search);
+
+    Task<User?> GetUserWithRolesAndPermissionsAsync(string username);
 }

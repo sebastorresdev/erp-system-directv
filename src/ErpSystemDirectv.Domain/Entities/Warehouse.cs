@@ -9,23 +9,27 @@ public partial class Warehouse
 
     public string Name { get; set; } = null!;
 
-    public string ShortName { get; set; } = null!;
+    public string Code { get; set; } = null!;
 
-    public Guid UbigeoId { get; set; }
+    public string? Address { get; set; }
 
-    public string Address { get; set; } = null!;
+    public bool? Active { get; set; }
 
-    public bool IsActive { get; set; }
+    public DateTime? CreateDate { get; set; }
 
-    public DateTime RegistrationDate { get; set; }
+    public Guid CompanyId { get; set; }
 
-    public Guid BrancheId { get; set; }
+    public Guid? PartnerId { get; set; }
 
-    public virtual ICollection<Bodega> Bodegas { get; set; } = new List<Bodega>();
+    public DateTime? WriteId { get; set; }
 
-    public virtual Branch Branche { get; set; } = null!;
+    public virtual Company Company { get; set; } = null!;
 
-    public virtual Ubigeo Ubigeo { get; set; } = null!;
+    public virtual ICollection<Warehouse> InversePartner { get; set; } = new List<Warehouse>();
 
-    public virtual ICollection<WarehouseProduct> WarehouseProducts { get; set; } = new List<WarehouseProduct>();
+    public virtual Warehouse? Partner { get; set; }
+
+    public virtual ICollection<ProductCompany> ProductCompanies { get; set; } = new List<ProductCompany>();
+
+    public virtual ICollection<StockLocation> StockLocations { get; set; } = new List<StockLocation>();
 }

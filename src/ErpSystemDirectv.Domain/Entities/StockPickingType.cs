@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class MovementOperationType
+public partial class StockPickingType
 {
     public Guid Id { get; set; }
 
@@ -14,6 +14,4 @@ public partial class MovementOperationType
     public string Description { get; set; } = null!;
 
     public DateTime RegistrationDate { get; set; }
-
-    public virtual ICollection<ProductMovement> ProductMovements { get; set; } = new List<ProductMovement>();
 }

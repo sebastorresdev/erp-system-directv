@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ErpSystemDirectv.Domain.Entities;
 
-public partial class Permission
+public partial class Tag
 {
     public Guid Id { get; set; }
 
@@ -13,7 +13,7 @@ public partial class Permission
 
     public bool? Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
-    public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+    public DateTime? UpdatedAt { get; set; }
 }
