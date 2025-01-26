@@ -33,9 +33,9 @@ public partial class WorkOrder
 
     public Guid? ScheduledUid { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public Guid? EndUid { get; set; }
 

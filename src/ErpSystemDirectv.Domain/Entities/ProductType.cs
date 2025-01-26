@@ -9,5 +9,5 @@ public partial class ProductType
 
     public string? Name { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public virtual ICollection<ProductTemplate> ProductTemplates { get; set; } = new List<ProductTemplate>();
 }

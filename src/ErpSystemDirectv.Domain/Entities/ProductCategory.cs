@@ -11,25 +11,19 @@ public partial class ProductCategory
 
     public string? Note { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreationDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public Guid? ParentId { get; set; }
 
-    public Guid? WriteUid { get; set; }
-
-    public Guid? CreateUid { get; set; }
-
-    public DateTime? WriteDate { get; set; }
+    public Guid CreateUid { get; set; }
 
     public string? Color { get; set; }
 
-    public virtual User? CreateU { get; set; }
+    public virtual User CreateU { get; set; } = null!;
 
     public virtual ICollection<ProductCategory> InverseParent { get; set; } = new List<ProductCategory>();
 
     public virtual ProductCategory? Parent { get; set; }
-
-    public virtual User? WriteU { get; set; }
 }

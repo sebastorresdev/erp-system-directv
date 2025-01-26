@@ -2,13 +2,9 @@
   <p-toolbar [dt]="toolbarStyle">
     <ng-template #start>
       <p-button label="Nuevo" class="mx-4" variant="outlined"/>
-        <div class="flex flex-col mr-2">
-          <span class="text-primary">Usuarios</span>
-          <span class="text-surface-700 dark:text-surface-100">Nuevo</span>
-        </div>
-        <p-toast />
-        <p-button icon="pi pi-save" text severity="secondary" (click)="addUser()" pRipple/>
-        <p-button icon="pi pi-times" text severity="secondary" (click)="cancel()"/>
+      <p-toast />
+      <p-button icon="pi pi-save" text severity="secondary" (click)="addUser()" pRipple/>
+      <p-button icon="pi pi-times" text severity="secondary" (click)="cancel()"/>
     </ng-template>
     <ng-template #center>
     </ng-template>

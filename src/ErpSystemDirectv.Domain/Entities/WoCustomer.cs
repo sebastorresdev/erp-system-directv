@@ -37,5 +37,7 @@ public partial class WoCustomer
 
     public Guid? CompanyId { get; set; }
 
+    public virtual ICollection<PhoneNumber> PhoneNumbers { get; set; } = new List<PhoneNumber>();
+
     public virtual ICollection<WorkOrder> WorkOrders { get; set; } = new List<WorkOrder>();
 }

@@ -20,13 +20,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Permission> Permissions { get; set; }
 
-    public virtual DbSet<PhoneCompany> PhoneCompanies { get; set; }
-
-    public virtual DbSet<PhoneEmployee> PhoneEmployees { get; set; }
-
     public virtual DbSet<PhoneNumber> PhoneNumbers { get; set; }
-
-    public virtual DbSet<PhoneType> PhoneTypes { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -146,10 +140,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
         });
 
         modelBuilder.Entity<Employee>(entity =>
@@ -232,13 +222,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.Active)
-                .HasDefaultValue(true)
-                .HasColumnName("active");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -278,59 +261,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.Active)
-                .HasDefaultValue(true)
-                .HasColumnName("active");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.Name)
                 .HasMaxLength(128)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<PhoneCompany>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("company_phone_number_pkey");
-
-            entity.ToTable("phone_company");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.CompanyId).HasColumnName("company_id");
-            entity.Property(e => e.PhoneNumberId).HasColumnName("phone_number_id");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.PhoneCompanies)
-                .HasForeignKey(d => d.CompanyId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("company_phone_number_company_id_fkey");
-
-            entity.HasOne(d => d.PhoneNumber).WithMany(p => p.PhoneCompanies)
-                .HasForeignKey(d => d.PhoneNumberId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("company_phone_number_phone_id_fkey");
-        });
-
-        modelBuilder.Entity<PhoneEmployee>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("phone_employee_pkey");
-
-            entity.ToTable("phone_employee");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("create_date");
-            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
-            entity.Property(e => e.EmployeeId).HasColumnName("employee_id");
         });
 
         modelBuilder.Entity<PhoneNumber>(entity =>
@@ -345,6 +281,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("active");
+            entity.Property(e => e.Comment).HasColumnName("comment");
             entity.Property(e => e.CreateDate)
                 .HasColumnType("timestamp(0) without time zone")
                 .HasColumnName("create_date");
@@ -352,60 +289,30 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Number)
                 .HasMaxLength(16)
                 .HasColumnName("number");
-            entity.Property(e => e.PhoneTypeId).HasColumnName("phone_type_id");
             entity.Property(e => e.Primary)
                 .HasDefaultValue(false)
                 .HasColumnName("primary");
+            entity.Property(e => e.WoCustomerId).HasColumnName("wo_customer_id");
             entity.Property(e => e.WriteDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("write_date");
             entity.Property(e => e.WriteUid).HasColumnName("write_uid");
 
             entity.HasOne(d => d.CreateU).WithMany(p => p.PhoneNumberCreateUs)
                 .HasForeignKey(d => d.CreateUid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("phone_number_create_uid_fkey");
 
-            entity.HasOne(d => d.PhoneType).WithMany(p => p.PhoneNumbers)
-                .HasForeignKey(d => d.PhoneTypeId)
-                .HasConstraintName("phone_number_phone_type_id_fkey");
+            entity.HasOne(d => d.WoCustomer).WithMany(p => p.PhoneNumbers)
+                .HasForeignKey(d => d.WoCustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("phone_number_wo_customer_id_fkey");
 
             entity.HasOne(d => d.WriteU).WithMany(p => p.PhoneNumberWriteUs)
                 .HasForeignKey(d => d.WriteUid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("phone_number_write_uid_fkey");
-        });
-
-        modelBuilder.Entity<PhoneType>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("phone_type_pkey");
-
-            entity.ToTable("phone_type");
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("create_date");
-            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
-            entity.Property(e => e.Name)
-                .HasMaxLength(120)
-                .HasColumnName("name");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
-
-            entity.HasOne(d => d.CreateU).WithMany(p => p.PhoneTypeCreateUs)
-                .HasForeignKey(d => d.CreateUid)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("phone_type_create_uid_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.PhoneTypeWriteUs)
-                .HasForeignKey(d => d.WriteUid)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("phone_type_write_uid_fkey");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -459,14 +366,10 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("sku");
             entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
             entity.Property(e => e.UomId).HasColumnName("uom_id");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
 
-            entity.HasOne(d => d.CreateU).WithMany(p => p.ProductCreateUs)
+            entity.HasOne(d => d.CreateU).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CreateUid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("product_create_uid_fkey");
 
             entity.HasOne(d => d.ProductTemplate).WithMany(p => p.Products)
@@ -483,10 +386,6 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.UomId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("products_uom_id_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.ProductWriteUs)
-                .HasForeignKey(d => d.WriteUid)
-                .HasConstraintName("producto_write_uid_fkey");
         });
 
         modelBuilder.Entity<ProductCategory>(entity =>
@@ -506,11 +405,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Color)
                 .HasMaxLength(255)
                 .HasColumnName("color");
-            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
-            entity.Property(e => e.CreationDate)
+            entity.Property(e => e.CreateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("creation_date");
+                .HasColumnName("create_date");
+            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
             entity.Property(e => e.Name)
                 .HasMaxLength(128)
                 .HasColumnName("name");
@@ -518,13 +417,8 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(256)
                 .HasColumnName("note");
             entity.Property(e => e.ParentId).HasColumnName("parent_id");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
 
-            entity.HasOne(d => d.CreateU).WithMany(p => p.ProductCategoryCreateUs)
+            entity.HasOne(d => d.CreateU).WithMany(p => p.ProductCategories)
                 .HasForeignKey(d => d.CreateUid)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("product_category_create_uid_fkey");
@@ -533,11 +427,6 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.ParentId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("product_category_parent_id_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.ProductCategoryWriteUs)
-                .HasForeignKey(d => d.WriteUid)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("product_category_write_uid_fkey");
         });
 
         modelBuilder.Entity<ProductCompany>(entity =>
@@ -549,14 +438,14 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.IsActive)
+            entity.Property(e => e.Active)
                 .HasDefaultValue(true)
-                .HasColumnName("is_active");
-            entity.Property(e => e.ProductId).HasColumnName("product_id");
-            entity.Property(e => e.RegistrationDate)
+                .HasColumnName("active");
+            entity.Property(e => e.CreateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
+                .HasColumnName("create_date");
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
 
             entity.HasOne(d => d.Product).WithMany(p => p.ProductCompanies)
@@ -591,6 +480,7 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("create_date");
+            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
             entity.Property(e => e.DefaultCode)
                 .HasMaxLength(255)
                 .HasColumnName("default_code");
@@ -607,7 +497,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.SaleOk)
                 .HasDefaultValue(false)
                 .HasColumnName("sale_ok");
-            entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.TypeId).HasColumnName("type_id");
             entity.Property(e => e.UomId).HasColumnName("uom_id");
             entity.Property(e => e.Volume)
                 .HasPrecision(10, 2)
@@ -615,9 +505,20 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Weight)
                 .HasPrecision(10, 2)
                 .HasColumnName("weight");
-            entity.Property(e => e.WriteDate)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
+
+            entity.HasOne(d => d.CreateU).WithMany(p => p.ProductTemplates)
+                .HasForeignKey(d => d.CreateUid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("product_template_create_uid_fkey");
+
+            entity.HasOne(d => d.Type).WithMany(p => p.ProductTemplates)
+                .HasForeignKey(d => d.TypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("product_template_type_id_fkey");
+
+            entity.HasOne(d => d.Uom).WithMany(p => p.ProductTemplates)
+                .HasForeignKey(d => d.UomId)
+                .HasConstraintName("product_template_uom_id_fkey");
         });
 
         modelBuilder.Entity<ProductType>(entity =>
@@ -629,10 +530,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
                 .HasColumnName("name");
@@ -666,10 +563,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("name");
             entity.Property(e => e.ParentId).HasColumnName("parent_id");
-            entity.Property(e => e.UpdatedDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("updated_date");
 
             entity.HasOne(d => d.Company).WithMany(p => p.RhDepartments)
                 .HasForeignKey(d => d.CompanyId)
@@ -784,9 +677,6 @@ public partial class AppDbContext : DbContext
                 .HasColumnName("name");
             entity.Property(e => e.ParentLocationId).HasColumnName("parent_location_id");
             entity.Property(e => e.WarehouseId).HasColumnName("warehouse_id");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnName("write_date");
 
             entity.HasOne(d => d.LocationType).WithMany(p => p.StockLocations)
                 .HasForeignKey(d => d.LocationTypeId)
@@ -827,13 +717,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.Active)
-                .HasDefaultValue(true)
-                .HasColumnName("active");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(0) without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.LotId).HasColumnName("lot_id");
             entity.Property(e => e.PickingId).HasColumnName("picking_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
@@ -901,6 +784,7 @@ public partial class AppDbContext : DbContext
 
             entity.HasOne(d => d.CreateU).WithMany(p => p.StockPickingCreateUs)
                 .HasForeignKey(d => d.CreateUid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("stock_picking_create_uid_fkey");
 
             entity.HasOne(d => d.LocationDest).WithMany(p => p.StockPickingLocationDests)
@@ -943,10 +827,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.Description)
                 .HasMaxLength(128)
                 .HasColumnName("description");
@@ -977,10 +857,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(16)
                 .HasColumnName("name");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
         });
 
         modelBuilder.Entity<StockProductionLot>(entity =>
@@ -1015,13 +891,8 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(128)
                 .HasColumnName("serial_number");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
 
-            entity.HasOne(d => d.CreateU).WithMany(p => p.StockProductionLotCreateUs)
+            entity.HasOne(d => d.CreateU).WithMany(p => p.StockProductionLots)
                 .HasForeignKey(d => d.CreateUid)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("stock_production_lot_create_uid_fkey");
@@ -1029,11 +900,6 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Product).WithMany(p => p.StockProductionLots)
                 .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("stock_production_lot_product_id_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.StockProductionLotWriteUs)
-                .HasForeignKey(d => d.WriteUid)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("stock_production_lot_write_uid_fkey");
         });
 
         modelBuilder.Entity<StockQuant>(entity =>
@@ -1045,10 +911,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.CreateDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("create_date");
             entity.Property(e => e.LocationId).HasColumnName("location_id");
             entity.Property(e => e.LotId).HasColumnName("lot_id");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
@@ -1056,10 +918,6 @@ public partial class AppDbContext : DbContext
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("0")
                 .HasColumnName("quantity");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
 
             entity.HasOne(d => d.Location).WithMany(p => p.StockQuants)
                 .HasForeignKey(d => d.LocationId)
@@ -1109,10 +967,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Website)
                 .HasMaxLength(255)
                 .HasColumnName("website");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
 
             entity.HasOne(d => d.Ubigeo).WithMany(p => p.Suppliers)
                 .HasForeignKey(d => d.UbigeoId)
@@ -1132,18 +986,14 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Active)
                 .HasDefaultValue(true)
                 .HasColumnName("active");
-            entity.Property(e => e.CreatedAt)
+            entity.Property(e => e.CreateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
+                .HasColumnName("create_date");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("updated_at");
         });
 
         modelBuilder.Entity<Ubigeo>(entity =>
@@ -1200,10 +1050,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Symbol)
                 .HasMaxLength(4)
                 .HasColumnName("symbol");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
 
             entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
                 .HasForeignKey(d => d.ParentId)
@@ -1231,7 +1077,6 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("create_date");
-            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
@@ -1248,23 +1093,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(16)
                 .HasColumnName("username");
-            entity.Property(e => e.WriteDate)
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
-
-            entity.HasOne(d => d.CreateU).WithMany(p => p.InverseCreateU)
-                .HasForeignKey(d => d.CreateUid)
-                .HasConstraintName("user_create_uid_fkey");
 
             entity.HasOne(d => d.Employee).WithMany(p => p.Users)
                 .HasForeignKey(d => d.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("user_employee_id_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.InverseWriteU)
-                .HasForeignKey(d => d.WriteUid)
-                .HasConstraintName("user_write_uid_fkey");
         });
 
         modelBuilder.Entity<UserCompany>(entity =>
@@ -1306,32 +1139,18 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp(6) without time zone")
                 .HasColumnName("create_date");
-            entity.Property(e => e.CreateUid).HasColumnName("create_uid");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.WriteDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_date");
-            entity.Property(e => e.WriteUid).HasColumnName("write_uid");
-
-            entity.HasOne(d => d.CreateU).WithMany(p => p.UserRoleCreateUs)
-                .HasForeignKey(d => d.CreateUid)
-                .HasConstraintName("user_role_create_uid_fkey");
 
             entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_role_role_id_fkey");
 
-            entity.HasOne(d => d.User).WithMany(p => p.UserRoleUsers)
+            entity.HasOne(d => d.User).WithMany(p => p.UserRoles)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("user_role_user_id_fkey");
-
-            entity.HasOne(d => d.WriteU).WithMany(p => p.UserRoleWriteUs)
-                .HasForeignKey(d => d.WriteUid)
-                .HasConstraintName("user_role_write_id_fkey");
         });
 
         modelBuilder.Entity<Warehouse>(entity =>
@@ -1365,10 +1184,6 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(64)
                 .HasColumnName("name");
             entity.Property(e => e.PartnerId).HasColumnName("partner_id");
-            entity.Property(e => e.WriteId)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("write_id");
 
             entity.HasOne(d => d.Company).WithMany(p => p.Warehouses)
                 .HasForeignKey(d => d.CompanyId)
@@ -1517,6 +1332,10 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
             entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.CreateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp(6) without time zone")
+                .HasColumnName("create_date");
             entity.Property(e => e.Description)
                 .HasMaxLength(128)
                 .HasColumnName("description");
@@ -1524,10 +1343,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(64)
                 .HasColumnName("name");
-            entity.Property(e => e.RegistrationDate)
-                .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .HasColumnType("timestamp(6) without time zone")
-                .HasColumnName("registration_date");
         });
 
         modelBuilder.Entity<WoStatus>(entity =>

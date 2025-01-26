@@ -19,11 +19,9 @@ public partial class Supplier
 
     public string? Website { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? WriteDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 

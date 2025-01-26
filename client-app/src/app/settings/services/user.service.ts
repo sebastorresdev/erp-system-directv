@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 // Proyecto
 import { User } from '../interfaces/user';
 import { environment } from '../../../environments/environment';
+import { CreateUser } from '../interfaces/createUser';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,7 @@ export class UserService {
     return this._http.get<User[]>(`${this.userUrl}?search=${search}`);
   }
 
+  creatUser(user:CreateUser) : Observable<User> {
+    return this._http.post<User>(`${this.userUrl}`, user);
+  }
 }

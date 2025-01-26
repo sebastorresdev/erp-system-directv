@@ -18,10 +18,15 @@ public class UserController : ApiController
         _mediator = mediator;
     }
 
-    [Route("user")]
+    [HttpPost("user")]
     public async Task<IActionResult> CreateUser(CreateUserRequest request)
     {
-        var query = new CreateUserCommand(request.Username, request.Password, request.Email, request.EmployeeId);
+        var query = new CreateUserCommand(
+            request.Username, 
+            request.Password, 
+            request.Email, 
+            request.EmployeeId,
+            request.Image);
 
         var userResult = await _mediator.Send(query);
 

@@ -13,15 +13,15 @@ public partial class StockPicking
 
     public Guid LocationDestId { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
-    public DateTime? WriteDate { get; set; }
+    public DateTime WriteDate { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
     public TimeOnly? ReceivedDate { get; set; }
 
-    public Guid? CreateUid { get; set; }
+    public Guid CreateUid { get; set; }
 
     public Guid? ReceivedUid { get; set; }
 
@@ -35,7 +35,7 @@ public partial class StockPicking
 
     public string? ReferencesNumber { get; set; }
 
-    public virtual User? CreateU { get; set; }
+    public virtual User CreateU { get; set; } = null!;
 
     public virtual StockLocation Location { get; set; } = null!;
 

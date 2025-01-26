@@ -11,13 +11,9 @@ public partial class Module
 
     public string? Description { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
     public string Name { get; set; } = null!;
 
     public Guid? ModuleGroupId { get; set; }
-
-    public bool? Active { get; set; }
 
     public virtual ModuleGroup? ModuleGroup { get; set; }
 

@@ -11,9 +11,7 @@ public partial class Tag
 
     public string? Description { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
-
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime CreateDate { get; set; }
 }

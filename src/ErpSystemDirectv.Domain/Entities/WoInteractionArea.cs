@@ -11,7 +11,7 @@ public partial class WoInteractionArea
 
     public string? Description { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 }

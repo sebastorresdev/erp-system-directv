@@ -11,9 +11,9 @@ public partial class RolePermission
 
     public Guid RoleId { get; set; }
 
-    public TimeOnly? CreateDate { get; set; }
+    public TimeOnly CreateDate { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
     public virtual Permission Permission { get; set; } = null!;
 

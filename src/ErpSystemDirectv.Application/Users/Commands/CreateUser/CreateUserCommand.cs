@@ -6,7 +6,8 @@ namespace ErpSystemDirectv.Application.Users.Commands.CreateUser;
 
 public record CreateUserCommand(
     string Username,
-    string Password,
+    string? Password,
     string Email,
-    Guid EmployeeId)
+    Guid? EmployeeId,
+    string? Image)
     : IRequest<ErrorOr<User>>;

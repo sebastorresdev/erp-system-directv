@@ -19,11 +19,9 @@ public partial class RhDepartment
 
     public string? Color { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? UpdatedDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public virtual Company? Company { get; set; }
 

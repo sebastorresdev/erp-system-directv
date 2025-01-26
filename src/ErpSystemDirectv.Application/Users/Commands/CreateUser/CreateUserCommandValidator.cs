@@ -17,7 +17,6 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
             .EmailAddress().WithMessage("Email no es valido.");
         
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("La contraseña es requerida.")
             .MinimumLength(6).WithMessage("La contraseña debe tener al menos 6 caracteres.");
     }
 }

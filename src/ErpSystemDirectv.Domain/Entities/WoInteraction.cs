@@ -15,9 +15,9 @@ public partial class WoInteraction
 
     public Guid WoId { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public string? ContactPhone { get; set; }
 

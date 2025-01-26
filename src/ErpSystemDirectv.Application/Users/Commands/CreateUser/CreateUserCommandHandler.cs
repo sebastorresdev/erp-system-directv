@@ -18,12 +18,18 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
 
     public async Task<ErrorOr<User>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
+        // Validacion de usuario si ya existe en la base de datos
         if (await _userRepository.GetUserByUsername(request.Username) is not null)
         {
             return Error.Conflict(description: "Usuario ya existe");
         }
 
-        var password = _passwordHasher.HashPassword(request.Password);
+        if (await _userRepository.GetUserByEmail(request.Email) is not null)
+        {
+            return Error.Conflict(description: "Email ya existe");
+        }
+
+        var password = request.Password == null ? null : _passwordHasher.HashPassword(request.Password);
 
         var user = new User
         {
@@ -32,6 +38,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
             Password = password,
             Email = request.Email,
             EmployeeId = request.EmployeeId,
+            Img = request.Image,
         };
 
         await _userRepository.CreateUser(user);

@@ -11,11 +11,11 @@ public partial class ProductTemplate
 
     public string? Description { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public string? Color { get; set; }
 
-    public Guid? Type { get; set; }
+    public Guid TypeId { get; set; }
 
     public Guid? UomId { get; set; }
 
@@ -23,11 +23,9 @@ public partial class ProductTemplate
 
     public decimal? ListPrice { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? WriteDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public decimal? Weight { get; set; }
 
@@ -39,5 +37,13 @@ public partial class ProductTemplate
 
     public decimal? CostPrice { get; set; }
 
+    public Guid CreateUid { get; set; }
+
+    public virtual User CreateU { get; set; } = null!;
+
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public virtual ProductType Type { get; set; } = null!;
+
+    public virtual Uom? Uom { get; set; }
 }

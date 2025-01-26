@@ -2,3 +2,8 @@
 
 POST {{host}}/api/user
 Content-Type: application/json
+
+{
+    "username": "jjordi",
+    "email": "jjordi@gmail.com"
+}

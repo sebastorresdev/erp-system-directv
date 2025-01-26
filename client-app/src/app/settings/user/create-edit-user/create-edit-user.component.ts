@@ -15,6 +15,8 @@ import { Tooltip } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { Ripple } from 'primeng/ripple';
 import { Toast } from 'primeng/toast';
+import { UserService } from '../../services/user.service';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -38,6 +40,7 @@ export class CreateEditUserComponent implements OnInit {
 
   private readonly _router = inject(Router);
   private readonly _messageService = inject(MessageService);
+  private readonly _userService = inject(UserService);
 
   _formBuilder = inject(FormBuilder);
 
@@ -74,8 +77,8 @@ export class CreateEditUserComponent implements OnInit {
 
   }
 
-  showSuccess() {
-    this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+  showSuccess(message: string) {
+    this._messageService.add({ severity: 'success', summary: 'Success', detail: message });
   }
 
   showError(message: string) {
@@ -88,7 +91,14 @@ export class CreateEditUserComponent implements OnInit {
 
   addUser() {
     if (this.isFormValid()) {
-      this.showSuccess();
+      const newUser: CreateUser = {
+        username: this.userForm.get('username')?.value,
+        email: this.userForm.get('email')?.value,
+      };
+
+      this._userService.creatUser(newUser).subscribe((data) => {
+        this.showSuccess(data.username);
+      });
     }
 
     // NO HARA NADA

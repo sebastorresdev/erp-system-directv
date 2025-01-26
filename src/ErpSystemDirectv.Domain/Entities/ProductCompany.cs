@@ -11,9 +11,9 @@ public partial class ProductCompany
 
     public Guid ProductId { get; set; }
 
-    public bool IsActive { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime RegistrationDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public virtual Product Product { get; set; } = null!;
 

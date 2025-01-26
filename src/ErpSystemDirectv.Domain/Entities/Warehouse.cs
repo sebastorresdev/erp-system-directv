@@ -21,8 +21,6 @@ public partial class Warehouse
 
     public Guid? PartnerId { get; set; }
 
-    public DateTime? WriteId { get; set; }
-
     public virtual Company Company { get; set; } = null!;
 
     public virtual ICollection<Warehouse> InversePartner { get; set; } = new List<Warehouse>();

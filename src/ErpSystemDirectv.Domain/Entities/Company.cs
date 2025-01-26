@@ -17,11 +17,9 @@ public partial class Company
 
     public string? Email { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? WriteDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public string? Website { get; set; }
 
@@ -36,8 +34,6 @@ public partial class Company
     public string? PhoneNumber1 { get; set; }
 
     public string? PhoneNumber2 { get; set; }
-
-    public virtual ICollection<PhoneCompany> PhoneCompanies { get; set; } = new List<PhoneCompany>();
 
     public virtual ICollection<RhDepartment> RhDepartments { get; set; } = new List<RhDepartment>();
 

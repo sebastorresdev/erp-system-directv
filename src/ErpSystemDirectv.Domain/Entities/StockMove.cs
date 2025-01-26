@@ -9,8 +9,6 @@ public partial class StockMove
 
     public Guid StockMoveStatusId { get; set; }
 
-    public bool? Active { get; set; }
-
     public decimal? Quantity { get; set; }
 
     public Guid ProductId { get; set; }
@@ -18,8 +16,6 @@ public partial class StockMove
     public Guid? LotId { get; set; }
 
     public Guid PickingId { get; set; }
-
-    public DateTime? CreateDate { get; set; }
 
     public virtual StockProductionLot? Lot { get; set; }
 

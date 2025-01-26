@@ -14,7 +14,7 @@ public partial class Product
 
     public BitArray? Description { get; set; }
 
-    public Guid? ProductTemplateId { get; set; }
+    public Guid ProductTemplateId { get; set; }
 
     public string? Model { get; set; }
 
@@ -26,11 +26,9 @@ public partial class Product
 
     public string? Image { get; set; }
 
-    public bool? Active { get; set; }
+    public bool Active { get; set; }
 
-    public DateTime? CreateDate { get; set; }
-
-    public DateTime? WriteDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     public string? Color { get; set; }
 
@@ -38,15 +36,13 @@ public partial class Product
 
     public string? Barcode { get; set; }
 
-    public Guid? CreateUid { get; set; }
+    public Guid CreateUid { get; set; }
 
-    public Guid? WriteUid { get; set; }
-
-    public virtual User? CreateU { get; set; }
+    public virtual User CreateU { get; set; } = null!;
 
     public virtual ICollection<ProductCompany> ProductCompanies { get; set; } = new List<ProductCompany>();
 
-    public virtual ProductTemplate? ProductTemplate { get; set; }
+    public virtual ProductTemplate ProductTemplate { get; set; } = null!;
 
     public virtual ICollection<StockMove> StockMoves { get; set; } = new List<StockMove>();
 
@@ -57,6 +53,4 @@ public partial class Product
     public virtual Supplier? Supplier { get; set; }
 
     public virtual Uom? Uom { get; set; }
-
-    public virtual User? WriteU { get; set; }
 }
